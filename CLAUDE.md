@@ -2,49 +2,79 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## Repository Overview
-
-This is a fresh repository for meteor-mo2-plugins, currently containing only a LICENSE file. The repository appears to be intended for Mod Organizer 2 (MO2) plugins related to the Meteor project.
-
-## Current State
-
-The repository is in its initial state with:
-
-- MIT License (Copyright 2025 Alex Blount)
-- Empty codebase ready for development
-
-## Development Notes
-
-Since this is a new repository with no existing code structure, future development should establish:
-
-- Project structure and architecture
-- Build system and dependencies
-- Testing framework
-- Development workflow
-
 ## Purpose
 
-You, the AI Agent, are helping the user to create Mod Organizer 2 (MO2) plugins in python. The user primarily plays modded Skyrim.
+This repository is for developing Mod Organizer 2 (MO2) plugins in Python, primarily for modded Skyrim. Always reference the included API documentation to ensure high-quality, compatible code.
 
-## Mod Organizer 2 api
+## Repository Structure
 
-Reference these api when writing code for MO2 plugins:
+```
+├── docs/MO2 Python Plugin API/    # Complete MO2 API documentation
+│   ├── mo2-python-api.rst.txt     # Core MO2 Python API
+│   ├── mo2-widgets-api.rst.txt    # UI/Widget APIs (PyQt6)
+│   ├── plugin-types.rst.txt       # Plugin type definitions
+│   ├── setup-tools.rst.txt        # Plugin setup and installation
+│   └── writing-plugins.rst.txt    # Plugin development guide
+├── examples/                      # Reference implementations
+├── projects/                      # Active plugin projects
+└── docs/                         # Additional documentation
+```
 
-- **mo2-python-api.txt** - python api definition for MO2
-- **mo2-widget-api.text** - python api definitions for UI in MO2
+## API Documentation
 
-## Sample Files
+**ALWAYS reference these files when writing MO2 plugins:**
 
-- **changeloggen4.py** - a plugin that compares two modlists to create a changelog. organizes the output by separator.
-- **LazyModlistRenamer.py and LazyModlistUnRenamer.py** - a plugin which iterates through your MO2 modlist and add's canonical naming (kind of) to the mods and separators. This serves 2 purposes: 1) Good for organization. 2) It makes your mod folders sort and import in the exact order in a new instance of MO2.
-- **[NoDelete] Indexer.py** - A plugin for Mod Organizer 2 that will automatically index all mods and separators with the NoDelete tag. Also includes a backup system. Useful to keep your custom mod order when updating the modlist via Wabbajack.
+- `docs/MO2 Python Plugin API/mo2-python-api.rst.txt` - Core mobase module API
+- `docs/MO2 Python Plugin API/mo2-widgets-api.rst.txt` - UI components (PyQt6-based)
+- `docs/MO2 Python Plugin API/plugin-types.rst.txt` - Plugin architecture patterns
+- `docs/MO2 Python Plugin API/writing-plugins.rst.txt` - Development guidelines
 
-## MO2 Known Issues
+## Key MO2 Development Patterns
 
-- Changing mod names too fast will cause `modlist.txt` to not get properly updated. This will result in breaking the mod list. The approach in `[NoDelete] Indexer.py` is prone to this side effect.
-- `LazyModlistRenamer.py` and `LazyModlistUnRenamer.py` also rename multiple mods, but does not seem to trigger the issue where the modlist fails to update, likely due to a delay in updating each mod name.
-- modlist.txt is in reverse order, so ordering with it must be reversed to display mods in proper order to a user in UI elements. `changeloggen4.py` has examples of reading the mod list order and displaying it to the user in sections properly.
+### Core Imports
 
-## Successes
+```python
+import mobase
+from PyQt6.QtCore import *
+from PyQt6.QtGui import *
+from PyQt6.QtWidgets import *
+```
 
-- 16-AUG-2025 - Released `no_delete_tagger.py` as "NoDelete Tagger and Indexer" to Nexus at <https://www.nexusmods.com/skyrimspecialedition/mods/157026>
+### Essential APIs
+
+- `organizer.modList()` - Access mod list operations
+- `organizer.getMod(name)` - Get mod interface
+- `mod.version().displayString()` - Get mod version
+- `mobase.widgets.TaskDialog` - Custom dialog creation
+
+## Example Implementations
+
+Located in `examples/`:
+
+- **`changeloggen.py`** - Compares modlists to generate changelogs organized by separators
+- **`LazyModlistRenamer.py` / `LazyModlistUnRenamer.py`** - Canonical mod naming for organization and import ordering
+- **`[NoDelete] Indexer.py`** - Auto-indexes mods/separators with NoDelete tag, includes backup system
+
+## Known Issues & Solutions
+
+### Critical Race Conditions
+
+- **Issue**: Rapid mod name changes break `modlist.txt` updates
+- **Solution**: Add delays between mod operations (see `LazyModlistRenamer.py` implementation)
+
+### Mod List Ordering
+
+- **Issue**: `modlist.txt` stores mods in reverse order
+- **Solution**: Reverse order when displaying to users (reference `changeloggen.py:` examples)
+
+## Development Guidelines
+
+1. **Always use delays** when performing bulk mod operations
+2. **Reference API docs** before implementing any mobase functionality  
+3. **Test with small mod lists** before deploying to large installations
+4. **Include error handling** for file operations and mod access
+5. **Follow PyQt6 patterns** for UI components
+
+## Recent Releases
+
+- 16-AUG-2025: Released `no_delete_tagger.py` to Nexus: [NoDelete Tagger and Indexer](https://www.nexusmods.com/skyrimspecialedition/mods/157026)
