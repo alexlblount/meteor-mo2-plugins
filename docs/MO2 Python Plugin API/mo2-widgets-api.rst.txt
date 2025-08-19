@@ -1,0 +1,140 @@
+mobase.widgets
+==============
+
+.. py:module:: mobase.widgets
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   mobase.widgets.__version__
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   mobase.widgets.TaskDialog
+   mobase.widgets.TaskDialogButton
+
+
+Package Contents
+----------------
+
+.. py:class:: TaskDialog(parent: PyQt6.QtWidgets.QWidget | None = None, title: str = '', main: str = '', content: str = '', details: str = '', icon: PyQt6.QtWidgets.QMessageBox.Icon = PyQt6.QtWidgets.QMessageBox.Icon.NoIcon, buttons: list[TaskDialogButton] = [], remember: Union[str, tuple[str, str]] = '')
+
+   Customizable choice dialog.
+
+
+   .. py:method:: addButton(button: TaskDialogButton) -> TaskDialog
+
+      Add a custom button to this TaskDialog.
+
+      :param button: Button to add to the dialog.
+
+
+
+   .. py:method:: addContent(widget: PyQt6.QtWidgets.QWidget) -> None
+
+      Add a custom widget content to this TaskDialog. Widget content are put between
+      content and buttons (above buttons).
+
+      :param widget: Widget to add.
+
+
+
+   .. py:method:: exec() -> PyQt6.QtWidgets.QMessageBox.StandardButton
+
+      Display this dialog and wait for user-interaction to return. This is a blocking
+      function.
+
+      :returns: The button clicked by the user. Without custom buttons, this return Ok,
+
+      otherwise it returns the button set in the TaskDialogButton.
+
+
+
+   .. py:method:: setContent(content: str) -> TaskDialog
+
+      Set the top-level message of this dialog.
+
+      :param content: Top-level message to set.
+
+
+
+   .. py:method:: setDetails(details: str) -> TaskDialog
+
+      Set the details for this TaskDialog.
+
+      The details are hidden by default and the user can display them by clicking
+      the "Details" button at the bottom of the TaskDialog.
+
+      :param details: Details content to display. Can be a multi-line string.
+
+
+
+   .. py:method:: setIcon(icon: PyQt6.QtWidgets.QMessageBox.Icon) -> TaskDialog
+
+      Set the icon of the dialog.
+
+      :param icon: Icon of the dialog.
+
+
+
+   .. py:method:: setMain(main: str) -> TaskDialog
+
+      Set the main message of the dialog. The main message is displayed at the top of
+      the dialog in large font.
+
+      :param main: Main message of the dialog.
+
+
+
+   .. py:method:: setRemember(action: str, file: str = '') -> TaskDialog
+
+      Configure the dialog to remember user-choice.
+
+
+
+   .. py:method:: setTitle(title: str) -> TaskDialog
+
+      Set the title of the dialog.
+
+      :param title: Title of the dialog.
+
+
+
+   .. py:method:: setWidth(width: int) -> None
+
+      Set the width of the dialog.
+
+      :param width: Width of the dialog.
+
+
+
+.. py:class:: TaskDialogButton(text: str, description: str, button: PyQt6.QtWidgets.QMessageBox.StandardButton)
+              TaskDialogButton(text: str, button: PyQt6.QtWidgets.QMessageBox.StandardButton)
+
+   Special button to be used inside TaskDialog widgets.
+
+
+   .. py:property:: button
+      :type: PyQt6.QtWidgets.QMessageBox.StandardButton
+
+
+
+   .. py:property:: description
+      :type: str
+
+
+
+   .. py:property:: text
+      :type: str
+
+
+
+.. py:data:: __version__
+   :value: '2.5.2'

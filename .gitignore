@@ -205,3 +205,10 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# -----------------------------------------------------------
+# CUSTOM IGNORES
+# -----------------------------------------------------------
+
+# other mo2 plugins that type have hosting restrictions, so we can't push up to git
+examples/
