@@ -64,7 +64,7 @@ class PBRCoverageChecker(mobase.IPluginTool):
                         enabled_mods.append((mod_name, mod.absolutePath()))
 
             # Scan for PBR coverage using PBRNifPatcher folders
-            pbr_covered_textures = set()
+            pbr_covered_textures = defaultdict(set)  # {texture_path: {providing_mod1, providing_mod2}}
             regular_textures = defaultdict(list)
             debug_info = []
             
@@ -73,15 +73,16 @@ class PBRCoverageChecker(mobase.IPluginTool):
                 self._scan_regular_textures(mod_name, mod_path, regular_textures, debug_info)
 
             # Find coverage
-            covered_mods, uncovered_mods = self._find_coverage_analysis(pbr_covered_textures, regular_textures)
+            covered_mods, uncovered_mods, coverage_providers = self._find_coverage_analysis(pbr_covered_textures, regular_textures)
             
             # Display results (with debug info)
-            self._show_results(covered_mods, uncovered_mods, pbr_covered_textures, regular_textures, enabled_mods, debug_info)
+            self._show_results(covered_mods, uncovered_mods, coverage_providers, pbr_covered_textures, regular_textures, enabled_mods, debug_info)
 
         except Exception as e:
             QMessageBox.critical(self.__parentWidget, "Error", f"Failed to analyze PBR coverage: {str(e)}")
 
     def _scan_pbr_coverage(self, mod_name, mod_path, pbr_covered_textures, debug_info):
+        # pbr_covered_textures is now a dict: {texture_path: set of providing mods}
         pbr_patcher_path = Path(mod_path) / "PBRNifPatcher"
         if not pbr_patcher_path.exists():
             return
@@ -135,7 +136,7 @@ class PBRCoverageChecker(mobase.IPluginTool):
                             if excluded_count <= 3:
                                 debug_info.append(f"Excluded (PG Patcher skip): {texture_path}")
                         else:
-                            pbr_covered_textures.add(texture_path.lower())
+                            pbr_covered_textures[texture_path.lower()].add(mod_name)
                             json_count += 1
                             
                             if json_count <= 5:
@@ -181,17 +182,18 @@ class PBRCoverageChecker(mobase.IPluginTool):
     def _find_coverage_analysis(self, pbr_covered_textures, regular_textures):
         covered_mods = defaultdict(list)
         uncovered_mods = defaultdict(list)
+        coverage_providers = defaultdict(set)  # {mod_name: {providing_pbr_mods}}
         debug_matches = []
         
         for texture_path, mod_names in regular_textures.items():
             # Check if this texture or its base name is covered by PBR
-            is_covered = False
+            providing_pbr_mods = set()
             match_info = f"Checking: {texture_path}"
             
             # Direct match
             if texture_path in pbr_covered_textures:
-                is_covered = True
-                match_info += " -> Direct match found"
+                providing_pbr_mods = pbr_covered_textures[texture_path]
+                match_info += f" -> Direct match found by {list(providing_pbr_mods)}"
             else:
                 # Check base name match (for texture variants)
                 base_name = Path(texture_path).stem
@@ -226,8 +228,8 @@ class PBRCoverageChecker(mobase.IPluginTool):
                 match_info += f" -> Base: {original_base} -> {base_name} -> Looking for: {potential_covered}"
                 
                 if potential_covered in pbr_covered_textures:
-                    is_covered = True
-                    match_info += " -> MATCH FOUND"
+                    providing_pbr_mods = pbr_covered_textures[potential_covered]
+                    match_info += f" -> MATCH FOUND by {list(providing_pbr_mods)}"
                 else:
                     match_info += " -> NO MATCH"
             
@@ -235,19 +237,20 @@ class PBRCoverageChecker(mobase.IPluginTool):
             if 'elven' in texture_path.lower():
                 debug_matches.append(match_info)
             
-            # Sort into covered or uncovered
+            # Sort into covered or uncovered and track providers
             for mod_name in mod_names:
-                if is_covered:
+                if providing_pbr_mods:
                     covered_mods[mod_name].append(texture_path)
+                    coverage_providers[mod_name].update(providing_pbr_mods)
                 else:
                     uncovered_mods[mod_name].append(texture_path)
         
         # Store debug info for display
         self._debug_matches = debug_matches
         
-        return covered_mods, uncovered_mods
+        return covered_mods, uncovered_mods, coverage_providers
 
-    def _show_results(self, covered_mods, uncovered_mods, pbr_textures, regular_textures, enabled_mods, debug_info):
+    def _show_results(self, covered_mods, uncovered_mods, coverage_providers, pbr_textures, regular_textures, enabled_mods, debug_info):
         dialog = QDialog(self.__parentWidget)
         dialog.setWindowTitle("PBR Coverage Analysis")
         dialog.resize(800, 600)
@@ -301,12 +304,18 @@ class PBRCoverageChecker(mobase.IPluginTool):
             # Sort by coverage percentage (most covered first)
             for mod_name in sorted(mods_with_coverage.keys(), key=lambda x: mods_with_coverage[x]['coverage_percent'], reverse=True):
                 mod_data = mods_with_coverage[mod_name]
-                results_text += f"\n{mod_name} - {mod_data['covered_count']}/{mod_data['total_textures']} covered ({mod_data['coverage_percent']:.1f}%)\n"
+                results_text += f"\n{mod_name}\n"
+                results_text += f"  Coverage: {mod_data['covered_count']}/{mod_data['total_textures']} textures ({mod_data['coverage_percent']:.1f}%)\n"
+                
+                # Show which mods are providing PBR coverage
+                if mod_name in coverage_providers and coverage_providers[mod_name]:
+                    pbr_mods = sorted(list(coverage_providers[mod_name]))
+                    results_text += f"  PBR provided by: {', '.join(pbr_mods)}\n"
                 
                 if mod_data['uncovered_textures']:
                     results_text += "  Missing PBR coverage for:\n"
                     for texture in sorted(mod_data['uncovered_textures'])[:8]:
-                        results_text += f"    • {texture}\n"
+                        results_text += f"    - {texture}\n"
                     if len(mod_data['uncovered_textures']) > 8:
                         results_text += f"    ... and {len(mod_data['uncovered_textures']) - 8} more\n"
                 else:
@@ -321,7 +330,7 @@ class PBRCoverageChecker(mobase.IPluginTool):
         button_layout = QHBoxLayout()
         
         export_btn = QPushButton("Export Results")
-        export_btn.clicked.connect(lambda: self._export_results(covered_mods, uncovered_mods, regular_textures))
+        export_btn.clicked.connect(lambda: self._export_results(covered_mods, uncovered_mods, coverage_providers, regular_textures))
         button_layout.addWidget(export_btn)
         
         close_btn = QPushButton("Close")
@@ -332,7 +341,7 @@ class PBRCoverageChecker(mobase.IPluginTool):
         
         dialog.exec()
 
-    def _export_results(self, covered_mods, uncovered_mods, regular_textures):
+    def _export_results(self, covered_mods, uncovered_mods, coverage_providers, regular_textures):
         file_path, _ = QFileDialog.getSaveFileName(
             self.__parentWidget,
             "Export PBR Coverage Results",
@@ -370,6 +379,11 @@ class PBRCoverageChecker(mobase.IPluginTool):
                             mod_data = mods_with_coverage[mod_name]
                             f.write(f"{mod_name}\n")
                             f.write(f"  Coverage: {mod_data['covered_count']}/{mod_data['total_textures']} textures ({mod_data['coverage_percent']:.1f}%)\n")
+                            
+                            # Show which mods are providing PBR coverage
+                            if mod_name in coverage_providers and coverage_providers[mod_name]:
+                                pbr_mods = sorted(list(coverage_providers[mod_name]))
+                                f.write(f"  PBR provided by: {', '.join(pbr_mods)}\n")
                             
                             if mod_data['uncovered_textures']:
                                 f.write("  Missing PBR coverage for:\n")
