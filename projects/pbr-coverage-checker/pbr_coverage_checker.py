@@ -132,7 +132,25 @@ class PBRCoverageChecker(mobase.IPluginTool):
         debug_info.append(f"Found PBRNifPatcher folder in '{mod_name}'")
         
         # Patterns that PG Patcher doesn't patch (exclude from coverage analysis)
-        excluded_patterns = ['cameras', 'dyndolod', 'lod', 'markers']
+        # Based on PG Patcher hardcoded ignores from source code analysis
+        excluded_patterns = [
+            # Original patterns
+            'cameras', 'dyndolod', 'lod', 'markers',
+            
+            # Additional PG Patcher exclusions found in source code:
+            # Non-patchable texture types from PG Patcher
+            'facetint', 'skintint',  # PBR ignores Skin Tint and Face Tint types
+            'landscape', 'grass',    # Landscape and grass textures can't be PBR'ed
+            
+            # File patterns that PG Patcher skips
+            'meta.ini',  # Special MO2 metadata file
+            
+            # Creation Club content patterns
+            'cc',  # Creation Club BSAs start with "cc"
+            
+            # Resource pack patterns  
+            '_resourcepack',  # Resource pack BSAs end with "_resourcepack.bsa"
+        ]
         
         json_count = 0
         excluded_count = 0
@@ -173,6 +191,15 @@ class PBRCoverageChecker(mobase.IPluginTool):
                         else:
                             texture_path = f"{texture_dir}/{texture_name}.dds"
                         
+                        # Check for non-ASCII characters (PG Patcher skips these)
+                        try:
+                            texture_path.encode('ascii')
+                        except UnicodeEncodeError:
+                            excluded_count += 1
+                            if excluded_count <= 3:
+                                debug_info.append(f"Excluded (non-ASCII chars): {texture_path}")
+                            continue
+                        
                         # Get base texture name (strip PBR suffixes for grouping)
                         base_texture_path = self._get_base_texture_name(texture_path).lower()
                         
@@ -199,7 +226,25 @@ class PBRCoverageChecker(mobase.IPluginTool):
             return
         
         # Patterns that PG Patcher doesn't patch (exclude from analysis)
-        excluded_patterns = ['cameras', 'dyndolod', 'lod', 'markers']
+        # Based on PG Patcher hardcoded ignores from source code analysis
+        excluded_patterns = [
+            # Original patterns
+            'cameras', 'dyndolod', 'lod', 'markers',
+            
+            # Additional PG Patcher exclusions found in source code:
+            # Non-patchable texture types from PG Patcher
+            'facetint', 'skintint',  # PBR ignores Skin Tint and Face Tint types
+            'landscape', 'grass',    # Landscape and grass textures can't be PBR'ed
+            
+            # File patterns that PG Patcher skips
+            'meta.ini',  # Special MO2 metadata file
+            
+            # Creation Club content patterns
+            'cc',  # Creation Club BSAs start with "cc"
+            
+            # Resource pack patterns  
+            '_resourcepack',  # Resource pack BSAs end with "_resourcepack.bsa"
+        ]
         
         base_textures_found = set()  # Track unique base textures for this mod
         excluded_count = 0
@@ -209,6 +254,13 @@ class PBRCoverageChecker(mobase.IPluginTool):
             relative_path = dds_file.relative_to(textures_path)
             path_str = str(relative_path).lower().replace('\\', '/')
             total_files_processed += 1
+            
+            # Check for non-ASCII characters (PG Patcher skips these)
+            try:
+                path_str.encode('ascii')
+            except UnicodeEncodeError:
+                excluded_count += 1
+                continue
             
             # Skip PBR textures and variant maps
             if path_str.startswith('pbr/') or '/pbr/' in path_str:
