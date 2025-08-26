@@ -181,33 +181,59 @@ class PBRCoverageChecker(mobase.IPluginTool):
     def _find_coverage_analysis(self, pbr_covered_textures, regular_textures):
         covered_mods = defaultdict(list)
         uncovered_mods = defaultdict(list)
+        debug_matches = []
         
         for texture_path, mod_names in regular_textures.items():
             # Check if this texture or its base name is covered by PBR
             is_covered = False
+            match_info = f"Checking: {texture_path}"
             
             # Direct match
             if texture_path in pbr_covered_textures:
                 is_covered = True
+                match_info += " -> Direct match found"
             else:
                 # Check base name match (for texture variants)
                 base_name = Path(texture_path).stem
                 texture_dir = str(Path(texture_path).parent)
+                original_base = base_name
                 
-                # Remove variant suffixes from base name
+                # Remove variant suffixes from base name (both numbered and text suffixes)
+                # First try numbered suffixes
                 for suffix in ['_01', '_02', '_03', '_04', '_05']:
                     if base_name.endswith(suffix):
                         base_name = base_name[:-3]
                         break
                 
-                # Reconstruct potential covered path
-                if texture_dir == '.':
+                # Then try any underscore suffix (like _em, _d, etc.)
+                if '_' in base_name:
+                    underscore_pos = base_name.rfind('_')
+                    potential_base = base_name[:underscore_pos]
+                    
+                    # Only strip if the suffix looks like a texture variant
+                    # (not too long, contains only letters/numbers)
+                    suffix_part = base_name[underscore_pos+1:]
+                    if len(suffix_part) <= 3 and suffix_part.isalnum():
+                        base_name = potential_base
+                
+                # Reconstruct potential covered path (normalize path separators to forward slashes)
+                texture_dir_normalized = texture_dir.replace('\\', '/')
+                if texture_dir_normalized == '.':
                     potential_covered = f"{base_name}.dds"
                 else:
-                    potential_covered = f"{texture_dir}/{base_name}.dds"
+                    potential_covered = f"{texture_dir_normalized}/{base_name}.dds"
+                
+                match_info += f" -> Base: {original_base} -> {base_name} -> Looking for: {potential_covered}"
                 
                 if potential_covered in pbr_covered_textures:
                     is_covered = True
+                    match_info += " -> MATCH FOUND"
+                else:
+                    match_info += " -> NO MATCH"
+            
+            # Store debug info for elven armor specifically
+            if 'elven' in texture_path.lower():
+                debug_matches.append(match_info)
             
             # Sort into covered or uncovered
             for mod_name in mod_names:
@@ -215,6 +241,9 @@ class PBRCoverageChecker(mobase.IPluginTool):
                     covered_mods[mod_name].append(texture_path)
                 else:
                     uncovered_mods[mod_name].append(texture_path)
+        
+        # Store debug info for display
+        self._debug_matches = debug_matches
         
         return covered_mods, uncovered_mods
 
@@ -238,6 +267,10 @@ class PBRCoverageChecker(mobase.IPluginTool):
         debug_display += f"Sample PBR covered textures: {list(pbr_textures)[:5]}\n"
         debug_display += f"Sample regular textures: {list(regular_textures.keys())[:5]}\n\n"
         debug_display += "Scan Details:\n" + "\n".join(debug_info[:25])
+        
+        # Add elven armor debug matches if available
+        if hasattr(self, '_debug_matches') and self._debug_matches:
+            debug_display += "\n\nElven Armor Matching Debug:\n" + "\n".join(self._debug_matches[:10])
         debug_text.setPlainText(debug_display)
         layout.addWidget(debug_text)
         
