@@ -1,0 +1,1 @@
+from .pbr_coverage_checker import createPlugin

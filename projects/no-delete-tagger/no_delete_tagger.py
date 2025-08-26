@@ -54,11 +54,14 @@ def strip_mod_tags(mod_name: str) -> str:
 def strip_numerical_index(mod_name: str) -> str:
     """
     Remove numerical index [xxx.xxxxx] from mod name while preserving other tags.
+    Only removes indexes in the specific format: [XXX.XXXXX] (3 digits, dot, 5 digits)
     Examples:
     "[NoDelete] [009.00001] Awesome Mod" -> "[NoDelete] Awesome Mod"
     "[SomeTag] [009.00001] Mod Name" -> "[SomeTag] Mod Name"
+    "[v1.2] Mod Name" -> "[v1.2] Mod Name" (preserved - not our format)
     """
-    pattern = r'\s*\[[0-9]+\.[0-9]+\]\s*'
+    # Match exactly 3 digits, dot, exactly 5 digits
+    pattern = r'\s*\[[0-9]{3}\.[0-9]{5}\]\s*'
     return re.sub(pattern, ' ', mod_name).strip()
 
 
