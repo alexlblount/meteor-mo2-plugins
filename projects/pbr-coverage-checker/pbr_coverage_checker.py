@@ -301,25 +301,49 @@ class PBRCoverageChecker(mobase.IPluginTool):
                     'uncovered_textures': uncovered_mods.get(mod_name, [])
                 }
             
-            # Sort by coverage percentage (most covered first)
-            for mod_name in sorted(mods_with_coverage.keys(), key=lambda x: mods_with_coverage[x]['coverage_percent'], reverse=True):
+            # Separate mods into fully covered and partially covered
+            fully_covered = []
+            partially_covered = []
+            
+            for mod_name in mods_with_coverage.keys():
                 mod_data = mods_with_coverage[mod_name]
-                results_text += f"\n{mod_name}\n"
-                results_text += f"  Coverage: {mod_data['covered_count']}/{mod_data['total_textures']} textures ({mod_data['coverage_percent']:.1f}%)\n"
+                if mod_data['coverage_percent'] >= 100.0:
+                    fully_covered.append(mod_name)
+                else:
+                    partially_covered.append(mod_name)
+            
+            # Show fully covered mods in condensed format
+            if fully_covered:
+                results_text += "\n✓ Fully covered by PBR\n"
+                results_text += "------------------------------------\n"
+                for mod_name in sorted(fully_covered):
+                    mod_data = mods_with_coverage[mod_name]
+                    pbr_mods = sorted(list(coverage_providers.get(mod_name, [])))
+                    pbr_list = f"[{', '.join(pbr_mods)}]" if pbr_mods else ""
+                    results_text += f"  {mod_name} {pbr_list}\n"
+            
+            # Show partially covered mods in detailed format
+            if partially_covered:
+                if fully_covered:  # Add separator if we showed fully covered mods
+                    results_text += "\nPartial PBR coverage:\n"
+                    results_text += "------------------------------------\n"
                 
-                # Show which mods are providing PBR coverage
-                if mod_name in coverage_providers and coverage_providers[mod_name]:
-                    pbr_mods = sorted(list(coverage_providers[mod_name]))
-                    results_text += f"  PBR provided by: {', '.join(pbr_mods)}\n"
-                
-                if mod_data['uncovered_textures']:
+                # Sort by coverage percentage (most covered first)
+                for mod_name in sorted(partially_covered, key=lambda x: mods_with_coverage[x]['coverage_percent'], reverse=True):
+                    mod_data = mods_with_coverage[mod_name]
+                    results_text += f"\n{mod_name}\n"
+                    results_text += f"  Coverage: {mod_data['covered_count']}/{mod_data['total_textures']} textures ({mod_data['coverage_percent']:.1f}%)\n"
+                    
+                    # Show which mods are providing PBR coverage
+                    if mod_name in coverage_providers and coverage_providers[mod_name]:
+                        pbr_mods = sorted(list(coverage_providers[mod_name]))
+                        results_text += f"  PBR provided by: {', '.join(pbr_mods)}\n"
+                    
                     results_text += "  Missing PBR coverage for:\n"
                     for texture in sorted(mod_data['uncovered_textures'])[:8]:
                         results_text += f"    - {texture}\n"
                     if len(mod_data['uncovered_textures']) > 8:
                         results_text += f"    ... and {len(mod_data['uncovered_textures']) - 8} more\n"
-                else:
-                    results_text += "  ✓ Fully covered by PBR\n"
             
             results_widget.setPlainText(results_text)
             layout.addWidget(results_widget)
@@ -374,24 +398,48 @@ class PBRCoverageChecker(mobase.IPluginTool):
                                 'uncovered_textures': uncovered_mods.get(mod_name, [])
                             }
                         
-                        # Sort by coverage percentage (most covered first)
-                        for mod_name in sorted(mods_with_coverage.keys(), key=lambda x: mods_with_coverage[x]['coverage_percent'], reverse=True):
+                        # Separate mods into fully covered and partially covered
+                        fully_covered = []
+                        partially_covered = []
+                        
+                        for mod_name in mods_with_coverage.keys():
                             mod_data = mods_with_coverage[mod_name]
-                            f.write(f"{mod_name}\n")
-                            f.write(f"  Coverage: {mod_data['covered_count']}/{mod_data['total_textures']} textures ({mod_data['coverage_percent']:.1f}%)\n")
+                            if mod_data['coverage_percent'] >= 100.0:
+                                fully_covered.append(mod_name)
+                            else:
+                                partially_covered.append(mod_name)
+                        
+                        # Export fully covered mods in condensed format
+                        if fully_covered:
+                            f.write("\n✓ Fully covered by PBR\n")
+                            f.write("------------------------------------\n")
+                            for mod_name in sorted(fully_covered):
+                                mod_data = mods_with_coverage[mod_name]
+                                pbr_mods = sorted(list(coverage_providers.get(mod_name, [])))
+                                pbr_list = f"[{', '.join(pbr_mods)}]" if pbr_mods else ""
+                                f.write(f"  {mod_name} {pbr_list}\n")
+                        
+                        # Export partially covered mods in detailed format
+                        if partially_covered:
+                            if fully_covered:  # Add separator if we showed fully covered mods
+                                f.write("\nPartial PBR coverage:\n")
+                                f.write("------------------------------------\n")
                             
-                            # Show which mods are providing PBR coverage
-                            if mod_name in coverage_providers and coverage_providers[mod_name]:
-                                pbr_mods = sorted(list(coverage_providers[mod_name]))
-                                f.write(f"  PBR provided by: {', '.join(pbr_mods)}\n")
-                            
-                            if mod_data['uncovered_textures']:
+                            # Sort by coverage percentage (most covered first)
+                            for mod_name in sorted(partially_covered, key=lambda x: mods_with_coverage[x]['coverage_percent'], reverse=True):
+                                mod_data = mods_with_coverage[mod_name]
+                                f.write(f"\n{mod_name}\n")
+                                f.write(f"  Coverage: {mod_data['covered_count']}/{mod_data['total_textures']} textures ({mod_data['coverage_percent']:.1f}%)\n")
+                                
+                                # Show which mods are providing PBR coverage
+                                if mod_name in coverage_providers and coverage_providers[mod_name]:
+                                    pbr_mods = sorted(list(coverage_providers[mod_name]))
+                                    f.write(f"  PBR provided by: {', '.join(pbr_mods)}\n")
+                                
                                 f.write("  Missing PBR coverage for:\n")
                                 for texture in sorted(mod_data['uncovered_textures']):
                                     f.write(f"    - {texture}\n")
-                            else:
-                                f.write("  ✓ Fully covered by PBR\n")
-                            f.write("\n")
+                                f.write("\n")
                     else:
                         f.write("No mods found with PBR coverage.\n")
                 
