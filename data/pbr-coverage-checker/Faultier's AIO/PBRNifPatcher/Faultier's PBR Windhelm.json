@@ -1,0 +1,439 @@
+{
+	"default":
+	{
+    "vertex_color_lum_mult": 0.5
+	},
+
+"entries": 
+[
+	{
+        "texture": "architecture\\windhelm\\wholdcrackedbrick2", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, "smooth_angle": 60.0, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.5
+    },
+	{
+        "texture": "architecture\\windhelm\\WHbigblocks01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, "smooth_angle": 60.0, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.5,
+		"rename": "architecture\\windhelm\\wholdcrackedbrick2"
+    },
+	{
+        "texture": "architecture\\windhelm\\whstoneflat2", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, "smooth_angle": 60.0, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.2
+    },
+	{
+        "texture": "architecture\\windhelm\\whstoneflattrim", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.1
+    },
+	{
+        "texture": "architecture\\windhelm\\whstoneroughsurface", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.1
+    },
+	{
+        "texture": "architecture\\windhelm\\500wallbig", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.1
+    },
+	{
+        "texture": "architecture\\windhelm\\outwall", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, "smooth_angle": 60.0, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.5
+    },
+	{
+        "texture": "architecture\\windhelm\\whoutwall", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, "smooth_angle": 60.0, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.5,
+		"rename": "architecture\\windhelm\\outwall"
+    },
+	{
+        "texture": "architecture\\windhelm\\whtrimstone2", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.1
+    },
+	{
+        "texture": "architecture\\windhelm\\whlargeloosestone", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.05
+    },
+	{
+        "texture": "nicola89b\\windhelm_bridge\\arch", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.25
+    },
+	{
+        "texture": "nicola89b\\windhelm_bridge\\metalwork01_jailring", "emissive": false, "parallax": false, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0
+    },
+	{
+        "texture": "nicola89b\\windhelm_bridge\\snow02", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.02, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.1,
+		"rename": "landscape\\snow01",
+		"glint": 
+			{
+				"screen_space_scale": 2.0,
+				"log_microfacet_density": 12.87,
+				"microfacet_roughness": 0.063,
+				"density_randomization": 2.128
+			}
+    },
+	{
+        "texture": "nicola89b\\windhelm_bridge\\sndiffuse", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.02, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.1,
+		"rename": "landscape\\snow01",
+		"glint": 
+			{
+				"screen_space_scale": 2.0,
+				"log_microfacet_density": 12.87,
+				"microfacet_roughness": 0.063,
+				"density_randomization": 2.128
+			}
+    },
+	{
+        "texture": "nicola89b\\windhelm_bridge\\archth", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.2,
+		"rename": "architecture\\windhelm\\whstoneflat2"
+    },
+	{
+        "texture": "architecture\\windhelm\\whstonefloor", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.25
+    },
+	{
+        "texture": "architecture\\windhelm\\whroughground", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.6
+    },
+	{
+        "texture": "architecture\\windhelm\\whroughgroundmud", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.6
+    },
+	{
+        "texture": "architecture\\windhelm\\whroughgroundwet", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.6
+    },
+	{
+        "texture": "puddle\\decalpuddles", "emissive": false, "parallax": false, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.022, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0
+    },
+	{
+        "texture": "architecture\\windhelm\\whstairblocks", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.05
+    },
+	{
+        "texture": "architecture\\windhelm\\whtrimstone1", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, "smooth_angle": 60.0, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.25
+    },
+	{
+        "texture": "architecture\\windhelm\\whstonerough2", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, "smooth_angle": 60.0, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.2
+    },
+	{
+        "texture": "architecture\\windhelm\\whinnsculpt", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, "smooth_angle": 60.0, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.1
+    },
+	{
+        "texture": "architecture\\windhelm\\whslateroof", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, "smooth_angle": 60.0, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.2
+    },
+	{
+        "texture": "architecture\\windhelm\\whwoodbase01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, "smooth_angle": 60.0, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.1
+    },
+	{
+        "texture": "architecture\\windhelm\\whwoodboards01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, "smooth_angle": 60.0, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.1
+    },
+	{
+        "texture": "architecture\\windhelm\\whwoodbasetrim", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, "smooth_angle": 60.0, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.4
+    },
+	{
+        "texture": "architecture\\windhelm\\whwindowmaps", "emissive": true, "parallax": true, "subsurface_foliage":false, "subsurface": false, "smooth_angle": 60.0, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 4.0,
+		"multilayer": true,
+		"coat_strength": 1.0,
+		"coat_roughness": 1.0,
+		"coat_specular_level": 0.04,
+		"coat_diffuse": true,
+		"coat_parallax": true,
+		"coat_normal": true,
+		"slot7": "textures\\PBR\\architecture\\windhelm\\whwindowmaps_n.dds",
+		"slot8": "textures\\PBR\\architecture\\windhelm\\whwindowmaps_coat.dds"
+    },
+	{
+        "texture": "architecture\\windhelm\\whwoodbeams", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, "smooth_angle": 60.0, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.1
+    },
+	{
+        "texture": "architecture\\windhelm\\whwoodboards02", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, "smooth_angle": 60.0, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.2
+    },
+	{
+        "texture": "architecture\\windhelm\\whroofbird01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, "smooth_angle": 60.0, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.2
+    },
+	{
+        "texture": "architecture\\windhelm\\whlogend", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, "smooth_angle": 60.0, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.2
+    },
+	{
+        "texture": "architecture\\windhelm\\whruinstone", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, "smooth_angle": 60.0, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.5
+    },
+	{
+        "texture": "architecture\\windhelm\\whblockoldsmall", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, "smooth_angle": 60.0, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.5
+    },
+	{
+        "texture": "architecture\\windhelm\\whblocktrimcaps", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, "smooth_angle": 60.0, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.5
+    },
+	{
+        "texture": "architecture\\windhelm\\flagstepsuv", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, "smooth_angle": 60.0, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.5
+    },
+	{
+        "texture": "architecture\\windhelm\\whflatiron1", "emissive": false, "parallax": false, "subsurface_foliage":false, "subsurface": false, "smooth_angle": 60.0, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.5
+    },
+	{
+        "texture": "architecture\\windhelm\\whgrayqmessystone", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, "smooth_angle": 60.0, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.2
+    },
+	{
+        "texture": "architecture\\windhelm\\whblockdecotrim", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, "smooth_angle": 60.0, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.1
+    },
+	{
+        "texture": "architecture\\windhelm\\whblockdeco", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, "smooth_angle": 60.0, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.1
+    },
+	{
+        "texture": "architecture\\windhelm\\whfountain", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, "smooth_angle": 60.0, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.1
+    },
+	{
+        "texture": "architecture\\windhelm\\whtalosbrick", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, "smooth_angle": 60.0, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.5
+    },
+	{
+        "texture": "architecture\\windhelm\\whtalosbrickdirty", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, "smooth_angle": 60.0, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.5,
+		"slot2": "textures\\PBR\\architecture\\windhelm\\whtalosbrick_n.dds",
+		"slot4": "textures\\PBR\\architecture\\windhelm\\whtalosbrick_p.dds"
+    },
+	{
+        "texture": "architecture\\windhelm\\whmixstonetrim", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, "smooth_angle": 60.0, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.3
+    },
+	{
+        "texture": "architecture\\windhelm\\ivy", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, "smooth_angle": 60.0, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.3
+    },
+	{
+        "texture": "architecture\\windhelm\\whtalostrim2", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, "smooth_angle": 60.0, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.3
+    },
+	{
+        "texture": "architecture\\windhelm\\whbird01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, "smooth_angle": 70.0, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.2
+    },
+	{
+        "texture": "architecture\\windhelm\\whstonehollow", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, "smooth_angle": 70.0, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.1
+    },
+	{
+        "texture": "architecture\\windhelm\\wholdcrackedbrick", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, "smooth_angle": 70.0, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.9
+    },
+	{
+        "texture": "architecture\\windhelm\\whstreetstone01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, "smooth_angle": 70.0, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.4
+    },
+	{
+        "texture": "windhelm fences\\fences", "emissive": false, "parallax": false, "subsurface_foliage":false, "subsurface": false, "smooth_angle": 70.0, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0
+    },
+	{
+        "texture": "windhelm fences\\fences2", "emissive": false, "parallax": false, "subsurface_foliage":false, "subsurface": false, "smooth_angle": 70.0, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0
+    },
+	{
+        "texture": "architecture\\windhelm\\whvalunstrad1", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, "smooth_angle": 70.0, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.1
+    },
+	{
+        "texture": "architecture\\windhelm\\whlgn", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, "smooth_angle": 70.0, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.2
+    },
+	{
+        "texture": "architecture\\windhelm\\whtgn", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, "smooth_angle": 70.0, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.2
+    },
+	{
+        "texture": "architecture\\windhelm\\whdirtbrick", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, "smooth_angle": 70.0, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.5
+    },
+	{
+        "texture": "faultierswindhelmdoor", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, "smooth_angle": 70.0, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.5
+    },
+	{
+        "texture": "faultiersgrayquarterdoor", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, "smooth_angle": 70.0, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.1
+    },
+	{
+        "texture": "architecture\\windhelm\\whouterheadbust", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, "smooth_angle": 70.0, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.5
+    },
+	{
+        "texture": "architecture\\windhelm\\whstonetrim01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, "smooth_angle": 70.0, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.5
+    },
+	{
+        "texture": "architecture\\windhelm\\whtombstone", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, "smooth_angle": 70.0, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.2
+    },
+	{
+        "texture": "architecture\\windhelm\\windowdecal", "emissive": true, "parallax": true, "subsurface_foliage":false, "subsurface": false, "smooth_angle": 60.0, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 4.0,
+		"emissive_scale": 1, "emissive_color": [0.27,0.15,0.06,1],
+		"multilayer": true,
+		"coat_strength": 1.0,
+		"coat_roughness": 1.0,
+		"coat_specular_level": 0.04,
+		"coat_diffuse": true,
+		"coat_parallax": true,
+		"coat_normal": true,
+		"slot7": "textures\\PBR\\architecture\\windhelm\\windowdecal_n.dds",
+		"slot8": "textures\\PBR\\architecture\\windhelm\\windowdecal_coat.dds"
+    },
+	{
+        "texture": "architecture\\windhelm\\WHVStone2", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, "smooth_angle": 70.0, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.2
+    },
+	{
+        "texture": "architecture\\windhelm\\WHVStone", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, "smooth_angle": 70.0, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.3
+    },
+	{
+        "texture": "architecture\\windhelm\\whlargeloosestone2", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, "smooth_angle": 70.0, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.1
+    },
+	{
+        "texture": "architecture\\windhelm\\whkings", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, "smooth_angle": 70.0, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.06
+    },
+	{
+        "texture": "architecture\\windhelm\\whwoodbaseinterior01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, "smooth_angle": 70.0, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.1
+    },
+	{
+        "texture": "architecture\\windhelm\\whroofinterior01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, "smooth_angle": 70.0, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.2
+    },
+	{
+        "texture": "architecture\\windhelm\\whwoodfloor01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, "smooth_angle": 70.0, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.15
+    },
+	{
+        "texture": "architecture\\windhelm\\whwoodboardsinterior01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, "smooth_angle": 70.0, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.25
+    },
+	{
+        "texture": "architecture\\windhelm\\whplaster", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, "smooth_angle": 60.0, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.5
+    },
+	{
+        "texture": "faultierswhinndoor", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, "smooth_angle": 70.0, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.1
+    },
+	{
+        "texture": "faultierswhmaingate1", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.05
+    },
+	{
+        "texture": "faultierswhcastlegate", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.05
+    },
+	{
+        "texture": "architecture\\windhelm\\whdiamondtile2", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, "smooth_angle": 60.0, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.3,
+		"rename": "architecture\\windhelm\\whdiamondtile1"
+    },
+	{
+        "texture": "architecture\\windhelm\\whdiamondtile1", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, "smooth_angle": 60.0, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.3
+    },
+	{
+        "texture": "architecture\\windhelm\\wharenawall1", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, "smooth_angle": 30.0, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.1
+    },
+	{
+        "texture": "architecture\\windhelm\\wharenabplane1", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, "smooth_angle": 60.0, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.5
+    },
+	{
+        "texture": "architecture\\windhelm\\WHarenabplane1decal", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, "smooth_angle": 60.0, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.5
+    },
+	{
+        "texture": "architecture\\windhelm\\ironuv", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, "smooth_angle": 60.0, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.1
+    },
+	{
+        "texture": "architecture\\windhelm\\whmarketstallroof01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": true, "smooth_angle": 60.0, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.2
+    },
+	{
+        "texture": "architecture\\windhelm\\bearsymbol", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, "smooth_angle": 60.0, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.2
+    },
+	{
+        "texture": "architecture\\windhelm\\sonsofskyrimfancybanner", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": true, "smooth_angle": 60.0, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.2
+    },
+	{
+        "texture": "architecture\\windhelm\\whbrickdecal1", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.5
+    },
+	{
+        "texture": "architecture\\windhelm\\whendtop01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, "smooth_angle": 60.0, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.7
+    },
+	{
+        "texture": "architecture\\windhelm\\whendlow01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, "smooth_angle": 60.0, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.7
+    },
+	{
+        "texture": "architecture\\windhelm\\whruinstonedark", "delete": true
+    },
+	{
+        "texture": "architecture\\windhelm\\whivy", "delete": true
+    },
+	{
+        "texture": "architecture\\windhelm\\whmortardecal", "delete": true
+    },
+	{
+        "texture": "architecture\\windhelm\\whtatteredflags", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": true, "smooth_angle": 60.0, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.2
+    },
+	{
+        "texture": "architecture\\windhelm\\whwindow1", "emissive": true, "parallax": true, "subsurface_foliage":false, "subsurface": false, "smooth_angle": 60.0, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 10.0, "emissive_scale": 2,
+		"multilayer": true,
+		"coat_strength": 1.0,
+		"coat_roughness": 1.0,
+		"coat_specular_level": 0.04,
+		"coat_diffuse": true,
+		"coat_parallax": true,
+		"coat_normal": true,
+		"slot7": "textures\\PBR\\architecture\\windhelm\\whwindow1_n.dds",
+		"slot8": "textures\\PBR\\architecture\\windhelm\\whwindow1_coat.dds"
+    },
+	{
+        "texture": "architecture\\windhelm\\whwoodbaselight", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, "smooth_angle": 60.0, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.1,
+		"rename": "architecture\\windhelm\\whwoodbase01"
+    },
+	{
+        "texture": "architecture\\windhelm\\whwoodbasedetails", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, "smooth_angle": 70.0, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.1,
+		"rename": "architecture\\windhelm\\whwoodbaseinterior01"
+    },
+	{
+        "texture": "architecture\\windhelm\\whwooddamage", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, "smooth_angle": 60.0, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.15
+    }
+]
+}

@@ -1,0 +1,86 @@
+{
+	"default":
+	{
+    "vertex_color_lum_mult": 0.3
+	},
+	
+"entries": 
+[
+    {
+        "texture": "architecture\\skyhaventemple\\skyhavendetails01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.2
+	},
+    {
+        "texture": "architecture\\skyhaventemple\\skyhavenstonedetails", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.4
+	},
+    {
+        "texture": "architecture\\skyhaventemple\\skyhavenstones01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 1.2
+	},
+    {
+        "texture": "architecture\\skyhaventemple\\skyhavenbloodbowl01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.2
+	},
+    {
+        "texture": "architecture\\skyhaventemple\\skyhavencircle01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.1
+	},
+    {
+        "texture": "architecture\\skyhaventemple\\skyhavenclovers01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.4, "smooth_angle": 60.0
+	},
+    {
+        "texture": "architecture\\skyhaventemple\\skyhavendoor01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.3
+	},
+    {
+        "texture": "architecture\\skyhaventemple\\skyhaveneagle01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.2
+	},
+    {
+        "texture": "architecture\\skyhaventemple\\skyhavenexteriorcarvings01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.2
+	},
+    {
+        "texture": "architecture\\skyhaventemple\\skyhavenfloor01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.2, "smooth_angle": 60.0
+	},
+    {
+        "texture": "architecture\\skyhaventemple\\skyhavenfloor02", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.1
+	},
+    {
+        "texture": "architecture\\skyhaventemple\\skyhavenpressure01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.2
+	},
+    {
+        "texture": "architecture\\skyhaventemple\\skyhavenremanface03", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.05
+	},
+    {
+        "texture": "architecture\\skyhaventemple\\skyhavenremanswall02", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.2
+	},
+    {
+        "texture": "architecture\\skyhaventemple\\skyhavenrock", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.2
+	},
+    {
+        "texture": "architecture\\skyhaventemple\\skyhavenroof01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.5, "smooth_angle": 60.0
+	},
+    {
+        "texture": "architecture\\skyhaventemple\\skyhavenstoneflat01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.2, "smooth_angle": 60.0
+	},
+    {
+        "texture": "architecture\\skyhaventemple\\skyhavenfloorstones01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.25, "smooth_angle": 60.0
+	},
+    {
+        "texture": "architecture\\skyhaventemple\\skyhaventorchbowl", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.2
+	}
+]
+}

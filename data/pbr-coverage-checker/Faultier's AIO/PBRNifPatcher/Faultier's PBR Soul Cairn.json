@@ -1,0 +1,152 @@
+{
+	"default":
+	{
+    "vertex_color_lum_mult": 0.5
+	},
+	
+"entries": 
+[
+    {
+        "texture": "dlc01\\landscape\\soulcairnbones01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.8
+    },
+    {
+        "texture": "dlc01\\soulcairn\\scbonetile", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.8,
+		"rename": "dlc01\\landscape\\soulcairnbones01"
+    },
+    {
+        "texture": "smim\\dlc01\\soulcairn\\smim_soulcairn_skeleton", "emissive": false, "parallax": false, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0
+    },
+    {
+        "texture": "smim\\dlc01\\soulcairn\\smim_soulcairn_bone", "emissive": false, "parallax": false, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0
+    },
+    {
+        "texture": "dlc01\\landscape\\soulcairndirt01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.5
+    },
+    {
+        "texture": "dlc01\\landscape\\soulcairndirt02", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.4
+    },
+    {
+        "texture": "dlc01\\landscape\\soulcairndirt03", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.5
+    },
+    {
+        "texture": "dlc01\\landscape\\soulcairndirt05", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.25
+    },
+    {
+        "texture": "dlc01\\landscape\\soulcairndirt06", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.25
+    },
+    {
+        "texture": "dlc01\\landscape\\soulcairnrock01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.5
+    },
+    {
+        "texture": "dlc01\\landscape\\soulcairnfissure", "emissive": true, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.4
+    },
+    {
+        "texture": "dlc01\\landscape\\soulcairndirtcliff", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.4
+    },
+    {
+        "texture": "dlc01\\soulcairn\\bwallbase2", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.2
+    },
+    {
+        "texture": "dlc01\\soulcairn\\bwallbasegray", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.2,
+		"rename": "dlc01\\soulcairn\\bwallbase2"
+    },
+    {
+        "texture": "dlc01\\soulcairn\\bwallbase", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.2,
+		"rename": "dlc01\\soulcairn\\bwallbase2"
+    },
+    {
+        "texture": "dlc01\\soulcairn\\sctrim", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.1
+    },
+    {
+        "texture": "dlc01\\soulcairn\\scstairs", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.1
+    },
+    {
+        "texture": "dlc01\\soulcairn\\bwallbase5", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.025
+    },
+    {
+        "texture": "dlc01\\soulcairn\\scmfloor", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.2,
+		"rename": "dlc01\\soulcairn\\scmfloor2"
+    },
+    {
+        "texture": "dlc01\\soulcairn\\scmfloor2", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.2
+    },
+    {
+        "texture": "dlc01\\soulcairn\\scmfloor3", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.2
+    },
+    {
+        "texture": "dlc01\\soulcairn\\sccrater1", "emissive": true, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.1
+    },
+    {
+        "texture": "dlc01\\soulcairn\\sc_chest01", "emissive": true, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.2, "smooth_angle": 60.0
+    },
+    {
+        "texture": "dlc01\\soulcairn\\sc_chest02", "emissive": true, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.2,
+		"rename": "dlc01\\soulcairn\\sc_chest01", "smooth_angle": 60.0
+    },
+    {
+        "texture": "dlc01\\soulcairn\\sc_gravestonea", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.1
+    },
+    {
+        "texture": "dlc01\\soulcairn\\sc_gravestoneb", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.1
+    },
+    {
+        "texture": "dlc01\\soulcairn\\sc_gravestonec", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.1
+    },
+    {
+        "texture": "dlc01\\soulcairn\\sc_gravestoned", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.1
+    },
+    {
+        "texture": "dlc01\\soulcairn\\spirebasic", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 40, "smooth_angle": 60.0,
+		"multilayer": true,
+		"coat_strength": 1.0,
+		"coat_roughness": 1.0,
+		"coat_specular_level": 0.04,
+		"coat_diffuse": false,
+		"coat_parallax": true,
+		"coat_normal": true,
+		"slot7": "textures\\pbr\\dlc01\\soulcairn\\spirebasic_n.dds",
+		"slot8": "textures\\pbr\\dlc01\\soulcairn\\spirebasic.dds"
+    },
+    {
+        "texture": "dlc01\\soulcairn\\sc_chest03", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.2, "smooth_angle": 60.0
+    },
+    {
+        "texture": "dlc01\\soulcairn\\sc_bydoor", "emissive": false, "parallax": false, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0, "smooth_angle": 30.0
+    },
+    {
+        "texture": "dlc01\\soulcairn\\sc_alter", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.1
+    }
+]
+}

@@ -1,0 +1,174 @@
+[ 
+    {
+        "texture": "shipdragonmetal01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.2
+    },
+    {
+        "texture": "shipgoldenmetal01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.2
+    },
+    {
+        "texture": "shipkatariah", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.02
+    },
+    {
+        "texture": "shiprope01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": true, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.2
+    },
+    {
+        "texture": "shipsload01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.2
+    },
+    {
+        "texture": "shipwindow01", "emissive": true, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 2,
+		"multilayer": true,
+		"coat_strength": 1.0,
+		"coat_roughness": 1.0,
+		"coat_specular_level": 0.04,
+		"coat_diffuse": true,
+		"coat_parallax": true,
+		"coat_normal": true,
+		"slot7": "textures\\PBR\\dungeons\\ships\\shipwindow01_n.dds",
+		"slot8": "textures\\PBR\\dungeons\\ships\\shipwindow01_coat.dds",
+		"emissive_color": [0.236,0.150,0.088,0], "emissive_scale": 0.5
+    },
+    {
+        "texture": "shipwood01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.2
+    },
+    {
+        "texture": "shipwood02", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.2
+    },
+    {
+        "texture": "shipwoodfloor01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.2
+    },
+    {
+        "texture": "shipwoodfloor03", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.2
+    },
+    {
+        "texture": "shipwoodside01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.2
+    },
+    {
+        "texture": "shipwoodside02", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.2
+    },
+    {
+        "texture": "metalwork01_gray", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.1,
+		"nif_filter": "ship",
+		"slot1": "textures\\PBR\\dungeons\\ships\\shipchain.dds", "slot2": "textures\\PBR\\dungeons\\ships\\shipchain_n.dds",
+		"slot4": "textures\\PBR\\dungeons\\ships\\shipchain_p.dds",  "slot6": "textures\\PBR\\dungeons\\ships\\shipchain_rmaos.dds"
+    },
+    {
+        "texture": "shipchain", "emissive": true, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.1,
+		"nif_filter": "ship"
+    },
+    {
+        "texture": "ratwayarmorydoor01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.2,
+		"slot1": "textures\\PBR\\dungeons\\ships\\shipkatariahdoor01.dds", "slot2": "textures\\PBR\\dungeons\\ships\\shipkatariahdoor01_n.dds",
+		"slot4": "textures\\PBR\\dungeons\\ships\\shipkatariahdoor01_p.dds",  "slot6": "textures\\PBR\\dungeons\\ships\\shipkatariahdoor01_rmaos.dds",
+		"nif_filter": "ship"
+    },
+    {
+        "texture": "shipkatariahdoor01", "emissive": true, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.2,
+		"nif_filter": "ship"
+    },
+	{
+        "texture": "ratwayirondoor01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.4,
+		"slot1": "textures\\PBR\\dungeons\\ships\\shipirondoor01.dds", "slot2": "textures\\PBR\\dungeons\\ships\\shipirondoor01_n.dds",
+		"slot4": "textures\\PBR\\dungeons\\ships\\shipirondoor01_p.dds",  "slot6": "textures\\PBR\\dungeons\\ships\\shipirondoor01_rmaos.dds",
+		"nif_filter": "ship"
+    },
+	{
+        "texture": "shipirondoor01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.4,
+		"nif_filter": "ship"
+    },
+	{
+        "texture": "ruinschair01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.1,
+		"slot1": "textures\\PBR\\dungeons\\ships\\shipthrone01.dds", "slot2": "textures\\PBR\\dungeons\\ships\\shipthrone01_n.dds",
+		"slot4": "textures\\PBR\\dungeons\\ships\\shipthrone01_p.dds",  "slot6": "textures\\PBR\\dungeons\\ships\\shipthrone01_rmaos.dds",
+		"nif_filter": "ship"
+    },
+    {
+        "texture": "shipthrone01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.1,
+		"nif_filter": "ship"
+    },  
+	{
+        "texture": "architecture\\windhelm\\whwindow03", "emissive": true, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 2,
+		"rename": "dungeons\\ships\\shipwindow03",
+		"multilayer": true,
+		"coat_strength": 1.0,
+		"coat_roughness": 1.0,
+		"coat_specular_level": 0.04,
+		"coat_diffuse": true,
+		"coat_parallax": true,
+		"coat_normal": true,
+		"slot7": "textures\\PBR\\dungeons\\ships\\shipwindow03_n.dds",
+		"slot8": "textures\\PBR\\dungeons\\ships\\shipwindow03_coat.dds",
+		"nif_filter": "ship", "emissive_color": [0.236,0.150,0.088,0], "emissive_scale": 2.0
+    },
+    {
+        "texture": "dungeons\\ships\\shipwindow03", "emissive": true, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 2,
+		"multilayer": true,
+		"coat_strength": 1.0,
+		"coat_roughness": 1.0,
+		"coat_specular_level": 0.04,
+		"coat_diffuse": true,
+		"coat_parallax": true,
+		"coat_normal": true,
+		"slot7": "textures\\PBR\\dungeons\\ships\\shipwindow03_n.dds",
+		"slot8": "textures\\PBR\\dungeons\\ships\\shipwindow03_coat.dds",
+		"nif_filter": "ship", "emissive_color": [0.236,0.150,0.088,0], "emissive_scale": 2.0
+    },
+	{
+        "texture": "wrroofint01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.2,
+		"slot1": "textures\\PBR\\dungeons\\ships\\shiproof02.dds", "slot2": "textures\\PBR\\dungeons\\ships\\shiproof02_n.dds",
+		"slot4": "textures\\PBR\\dungeons\\ships\\shiproof02_p.dds",  "slot6": "textures\\PBR\\dungeons\\ships\\shiproof02_rmaos.dds",
+		"nif_filter": "ship"
+    },
+    {
+        "texture": "shiproof02", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.2
+    },
+	{
+        "texture": "wrshields", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.2,
+		"slot1": "textures\\PBR\\dungeons\\ships\\shipshields.dds", "slot2": "textures\\PBR\\dungeons\\ships\\shipshields_n.dds",
+		"slot4": "textures\\PBR\\dungeons\\ships\\shipshields_p.dds",  "slot6": "textures\\PBR\\dungeons\\ships\\shipshields_rmaos.dds",
+		"nif_filter": "dungeons"
+    },
+    {
+        "texture": "shipshields", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.2
+    },
+	{
+        "texture": "wrshields", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.2,
+		"slot1": "textures\\PBR\\dungeons\\ships\\shipshields.dds", "slot2": "textures\\PBR\\dungeons\\ships\\shipshields_n.dds",
+		"slot4": "textures\\PBR\\dungeons\\ships\\shipshields_p.dds",  "slot6": "textures\\PBR\\dungeons\\ships\\shipshields_rmaos.dds",
+		"nif_filter": "animobjectboat"
+    },
+    {
+        "texture": "WoodEdgeTrim01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.1
+    },
+    {
+        "texture": "shipwoodside03", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.2
+    }
+]

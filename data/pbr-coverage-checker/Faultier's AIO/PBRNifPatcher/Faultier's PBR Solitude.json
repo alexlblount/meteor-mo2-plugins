@@ -1,0 +1,382 @@
+{
+	"default":
+	{
+    "vertex_color_lum_mult": 0.5,
+	"vertex_color_sat_mult": 0.5
+	},
+	
+"entries": 
+[
+	{
+        "texture": "sfloorhouse02", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.05
+    },
+	{
+        "texture": "sintfloor01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.05, "vertex_colors": false
+    },
+	{
+        "texture": "sstonestep01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.025
+    },
+	{
+        "texture": "sfloorhouse01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.1
+    },
+	{
+        "texture": "sstonefloor01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.2
+    },
+	{
+        "texture": "sstuccowallint01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.05
+    },
+	{
+        "texture": "sintcoloumn01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.1
+    },
+	{
+        "texture": "sintwalltop01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.1
+    },
+	{
+        "texture": "sintcoloumn02", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.1
+    },
+	{
+        "texture": "smetaldet01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.2
+    },
+	{
+        "texture": "smetaldet01", "emissive": false, "parallax": false, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0,
+		"nif_filter": "slgcstaspiral01", "rename": "smetaldet01alt"
+    },
+	{
+        "texture": "architecture\\solitude\\swindow03", "emissive": true, "parallax": true, "subsurface_foliage":false, "subsurface": false, "smooth_angle": 60.0, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 4.0,
+		"multilayer": true,
+		"coat_strength": 1.0,
+		"coat_roughness": 1.0,
+		"coat_specular_level": 0.04,
+		"coat_diffuse": true,
+		"coat_parallax": true,
+		"coat_normal": true,
+		"slot7": "textures\\PBR\\architecture\\Solitude\\swindow03_n.dds",
+		"slot8": "textures\\PBR\\architecture\\Solitude\\swindow03_coat.dds"
+    },
+	{
+        "texture": "architecture\\solitude\\swindow02", "emissive": true, "parallax": true, "subsurface_foliage":false, "subsurface": false, "smooth_angle": 60.0, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 6.0,
+		"rename":"architecture\\solitude\\swindow01",
+		"multilayer": true,
+		"coat_strength": 1.0,
+		"coat_roughness": 1.0,
+		"coat_specular_level": 0.04,
+		"coat_diffuse": true,
+		"coat_parallax": true,
+		"coat_normal": true,
+		"slot7": "textures\\PBR\\architecture\\Solitude\\swindow01_n.dds",
+		"slot8": "textures\\PBR\\architecture\\Solitude\\swindow01_coat.dds"
+    },
+	{
+        "texture": "architecture\\solitude\\swindow01", "emissive": true, "parallax": true, "subsurface_foliage":false, "subsurface": false, "smooth_angle": 60.0, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 6.0,
+		"multilayer": true,
+		"coat_strength": 1.0,
+		"coat_roughness": 1.0,
+		"coat_specular_level": 0.04,
+		"coat_diffuse": true,
+		"coat_parallax": true,
+		"coat_normal": true,
+		"slot7": "textures\\PBR\\architecture\\Solitude\\swindow01_n.dds",
+		"slot8": "textures\\PBR\\architecture\\Solitude\\swindow01_coat.dds"
+    },
+	{
+        "texture": "sclovers01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": true, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.2
+    },
+	{
+        "texture": "sstonebase01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.2
+    },
+	{
+        "texture": "strims01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.05
+    },
+	{
+        "texture": "strims02", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.3
+    },
+	{
+        "texture": "sstonewall02", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.5
+    },
+	{
+        "texture": "smoss01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.1
+    },
+	{
+        "texture": "sdetails01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.1
+    },
+	{
+        "texture": "ssteps01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.1
+    },
+	{
+        "texture": "ssteps02", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.1
+    },
+	{
+        "texture": "sstuccowall", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.1
+    },
+	{
+        "texture": "swoodbeam01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.1
+    },
+	{
+        "texture": "sdragontile01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.1
+    },
+	{
+        "texture": "sroofslate01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.4
+    },
+	{
+        "texture": "smoss02walls", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.1
+    },
+	{
+        "texture": "sdirt01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.1
+    },
+	{
+        "texture": "swoodplanks01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.2
+    },
+	{
+        "texture": "sgrass01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.4
+    },
+	{
+        "texture": "SstuccoWall02", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.1, "rename": "sstuccowall"
+    },
+	{
+        "texture": "sdragonhead01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.1
+    },
+	{
+        "texture": "scastlecol01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.1
+    },
+	{
+        "texture": "sdetint01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.1
+    },
+	{
+        "texture": "sstonewall03", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.2
+    },
+	{
+        "texture": "swoodfloor01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.1
+    },
+	{
+        "texture": "swoodfloor01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.1,
+		"nif_filter": "interior", "rename": "swoodfloor01int"
+    },
+	{
+        "texture": "swoodplanks01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.2,
+		"nif_filter": "interior", "rename": "swoodplanks01int"
+    },
+	{
+        "texture": "swoodbeam02", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.2
+    },
+	{
+        "texture": "swoodcolumn01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.1
+    },
+	{
+        "texture": "swoodstep01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.1
+    },
+	{
+        "texture": "snail01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.5
+    },
+	{
+        "texture": "snail01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.5,
+		"nif_filter": "interiors", "rename": "snail01int"
+    },
+	{
+        "texture": "sslatebaseint01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.1
+    },
+	{
+        "texture": "sslatebaseint01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.2,
+		"rename": "swoodstep01", "nif_filter": "smdewalsol01"
+    },
+	{
+        "texture": "sslatebaseint01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.2,
+		"rename": "swoodstep01", "nif_filter": "smdewalsol03"
+    },
+	{
+        "texture": "sslatebaseint01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.2,
+		"rename": "swoodstep01", "nif_filter": "smdewinsol01"
+    },
+	{
+        "texture": "sslatebaseint01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.2,
+		"rename": "swoodstep01", "nif_filter": "smdewinsol02"
+    },
+	{
+        "texture": "sslatebaseint01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.2,
+		"rename": "swoodstep01", "nif_filter": "smdewinsol04"
+    },
+	{
+        "texture": "swooddet01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.1
+    },
+	{
+        "texture": "sdoor01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.2
+    },
+	{
+        "texture": "sdoor02", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.4
+    },
+	{
+        "texture": "sdoor03", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.4
+    },
+	{
+        "texture": "smetaldoorl01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.6
+    },
+	{
+        "texture": "smim_SDoorGate01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.4
+    },
+	{
+        "texture": "smim_solitude_door_pattern", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.05
+    },
+	{
+        "texture": "smanhole", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 1.2
+    },
+	{
+        "texture": "sstonefloortrim01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.3
+    },
+	{
+        "texture": "WRRoofINTDecal", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.1,
+		"slot1": "textures\\PBR\\architecture\\Solitude\\swoodfloor01.dds", "slot2": "textures\\PBR\\architecture\\Solitude\\swoodfloor01_n.dds",
+		"slot4": "textures\\PBR\\architecture\\Solitude\\swoodfloor01_p.dds", "slot6": "textures\\PBR\\architecture\\Solitude\\swoodfloor01_rmaos.dds"
+    },
+	{
+        "texture": "Roof01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.4,
+		"slot1": "textures\\PBR\\architecture\\Solitude\\FarmRoof02.dds", "slot2": "textures\\PBR\\architecture\\Solitude\\FarmRoof02_n.dds",
+		"slot4": "textures\\PBR\\architecture\\Solitude\\FarmRoof02_p.dds", "slot6": "textures\\PBR\\architecture\\Solitude\\FarmRoof02_rmaos.dds",
+		"nif_filter": "solitude"
+    },
+	{
+        "texture": "Roof01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.4,
+		"slot1": "textures\\PBR\\architecture\\Solitude\\FarmRoof02.dds", "slot2": "textures\\PBR\\architecture\\Solitude\\FarmRoof02_n.dds",
+		"slot4": "textures\\PBR\\architecture\\Solitude\\FarmRoof02_p.dds", "slot6": "textures\\PBR\\architecture\\Solitude\\FarmRoof02_rmaos.dds",
+		"nif_filter": "xjk bardcollmeshes"
+    },
+	{
+        "texture": "sthrone", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.15
+    },
+	{
+        "texture": "sbanner01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.1
+    },
+	{
+        "texture": "smill01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.1
+    },
+	{
+        "texture": "smim_windmill_fan", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.2
+    },
+	{
+        "texture": "smim_windmill_sail", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": true, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.2
+    },
+	{
+        "texture": "smim_windmill_sail_solitude", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": true, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.2
+    },
+	{
+        "texture": "sgrate", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.2
+    },
+    {
+        "texture": "citybannersolitude01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.2
+    },
+    {
+        "texture": "metalwork01_brown", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 1.0,
+		"slot1": "textures\\pbr\\smim\\chains\\metalwork01_brown.dds",
+		"slot2": "textures\\pbr\\smim\\chains\\metalwork01_brown_n.dds",
+		"slot4": "textures\\pbr\\smim\\chains\\metalwork01_brown_p.dds",
+		"slot6": "textures\\pbr\\smim\\chains\\metalwork01_brown_rmaos.dds"
+    },
+	{
+        "texture": "sdirt02", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.1
+    },
+	{
+        "texture": "RiftenCanalWood01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.1,
+		"slot1": "textures\\PBR\\architecture\\solitude\\canalwood01.dds", "slot2": "textures\\PBR\\architecture\\solitude\\canalwood01_n.dds",
+		"slot4": "textures\\PBR\\architecture\\solitude\\canalwood01_p.dds", "slot6": "textures\\PBR\\architecture\\solitude\\canalwood01_rmaos.dds",
+		"nif_filter": "solitude"
+    },
+    {
+        "texture": "smim_docks_ropes", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.2,
+		"nif_filter": "solitude", "rename": "smim_docks_ropes2"
+    },
+    {
+        "texture": "sgravestone01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.2
+    },
+    {
+        "texture": "StoneEdgeTrim01", "nif_filter": "sgravestone01", "delete": true
+    },
+    {
+        "texture": "StoneEdgeTrim01", "nif_filter": "sgravestone02", "delete": true
+    },
+    {
+        "texture": "thalmorsbanner01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.05
+    },
+    {
+        "texture": "SstoneWall", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.3
+    },
+    {
+        "texture": "SRoofBlueMetal01", "emissive": false, "parallax": true, "subsurface_foliage":false, "subsurface": false, 
+        "specular_level" : 0.04, "subsurface_color": [1,1,1], "roughness_scale" : 1, "subsurface_opacity" : 1, "displacement_scale" : 0.1
+    }
+]
+}
