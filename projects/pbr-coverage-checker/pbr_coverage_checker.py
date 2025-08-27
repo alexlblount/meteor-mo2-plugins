@@ -21,6 +21,7 @@ class PBRCoverageChecker(mobase.IPluginTool):
             '_msn',      # Model space normal
             '_em',       # Environment mask (short form)
             '_sk',       # Skin tint
+            '_b',        # Unknown but seen in mods (variant texture?)
             '_d',        # Diffuse
             '_e',        # Cubemap
             '_f',        # Fuzz PBR
@@ -32,12 +33,28 @@ class PBRCoverageChecker(mobase.IPluginTool):
             'mask',      # Diffuse mask (no underscore!)
         ]
     
+    def _normalize_path(self, path_str):
+        """
+        Normalize path by removing empty parts and using consistent separators.
+        Handles leading slashes, double slashes, mixed separators.
+        E.g. '\\armor//steel\\cuirass' -> 'armor/steel/cuirass'
+        """
+        if not path_str:
+            return ""
+        
+        # Split on both types of slashes, filter empty parts, rejoin with forward slash
+        parts = [part for part in path_str.replace('\\', '/').split('/') if part]
+        return '/'.join(parts)
+
     def _get_base_texture_name(self, texture_path):
         """
         Convert texture path to base texture name by stripping PBR suffixes.
         E.g. 'armor/steel/cuirass_m.dds' -> 'armor/steel/cuirass.dds'
         """
-        path_obj = Path(texture_path)
+        # First normalize the path
+        normalized_path = self._normalize_path(texture_path)
+        
+        path_obj = Path(normalized_path)
         stem = path_obj.stem
         directory = str(path_obj.parent).replace('\\', '/')
         
@@ -109,6 +126,9 @@ class PBRCoverageChecker(mobase.IPluginTool):
             pbr_covered_textures = defaultdict(set)  # {base_texture_path: {providing_mod1, providing_mod2}}
             regular_textures = defaultdict(set)      # {base_texture_path: {mod1, mod2}} - using set to avoid duplicates from variants
             debug_info = []
+            debug_info.append("=== Enhanced PBR Coverage Analysis (v1.3) ===")
+            debug_info.append("Features: match_diffuse support, default merging, path normalization")
+            debug_info.append("Enhanced exclusions: facetint, skintint, landscape, grass, cc, _resourcepack, non-ASCII")
             
             for mod_name, mod_path in enabled_mods:
                 self._scan_pbr_coverage(mod_name, mod_path, pbr_covered_textures, debug_info)
@@ -171,25 +191,47 @@ class PBRCoverageChecker(mobase.IPluginTool):
                 # Check if path matches excluded patterns
                 is_excluded = any(pattern in texture_dir.lower() for pattern in excluded_patterns)
                 
-                # Handle both JSON formats
+                # Handle both JSON formats with default merging
                 entries = []
+                defaults = {}
+                
                 if isinstance(data, list):
                     # Simple array format (like Amidianborn)
                     entries = data
-                elif isinstance(data, dict) and 'entries' in data:
-                    # Object with entries array (like Faultier's)
-                    entries = data['entries']
+                elif isinstance(data, dict):
+                    # Object format - extract defaults and entries
+                    if 'default' in data:
+                        defaults = data['default']
+                    if 'entries' in data:
+                        entries = data['entries']
+                    else:
+                        # Treat the whole object as a single entry
+                        entries = [data]
                 
-                # Extract texture names from entries
+                # Process entries with default merging
                 for entry in entries:
-                    if 'texture' in entry:
-                        texture_name = entry['texture'].replace('\\', '/')
+                    # Merge defaults into entry (entry values override defaults)
+                    merged_entry = {**defaults, **entry}
+                    
+                    # Extract texture name - support both 'texture' and 'match_diffuse' fields
+                    texture_name = None
+                    if 'match_diffuse' in merged_entry:
+                        texture_name = merged_entry['match_diffuse']
+                    elif 'texture' in merged_entry:
+                        texture_name = merged_entry['texture']
+                    
+                    if texture_name:
+                        # Normalize the texture path
+                        texture_name = self._normalize_path(texture_name)
                         
                         # Build the full texture path
                         if texture_dir == '.':
                             texture_path = f"{texture_name}.dds"
                         else:
                             texture_path = f"{texture_dir}/{texture_name}.dds"
+                        
+                        # Normalize the full path too
+                        texture_path = self._normalize_path(texture_path)
                         
                         # Check for non-ASCII characters (PG Patcher skips these)
                         try:
@@ -252,7 +294,10 @@ class PBRCoverageChecker(mobase.IPluginTool):
         
         for dds_file in textures_path.rglob("*.dds"):
             relative_path = dds_file.relative_to(textures_path)
-            path_str = str(relative_path).lower().replace('\\', '/')
+            path_str = str(relative_path).replace('\\', '/')
+            
+            # Normalize the path for consistent matching
+            path_str = self._normalize_path(path_str).lower()
             total_files_processed += 1
             
             # Check for non-ASCII characters (PG Patcher skips these)

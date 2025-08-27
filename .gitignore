@@ -212,3 +212,4 @@ __marimo__/
 
 # other mo2 plugins that type have hosting restrictions, so we can't push up to git
 examples/
+data/

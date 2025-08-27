@@ -3,7 +3,9 @@
     "allow": [
       "Bash(mkdir:*)",
       "WebFetch(domain:github.com)",
-      "WebSearch"
+      "WebSearch",
+      "Bash(python:*)",
+      "Bash(del test_matching.py debug_path_matching.py)"
     ],
     "deny": [],
     "ask": []

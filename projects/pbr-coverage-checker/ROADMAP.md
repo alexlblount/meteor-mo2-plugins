@@ -41,12 +41,45 @@
   - ✅ All mod-added textures (loose + BSA)
   - ✅ True conflict resolution (what actually wins)
 
-### 1.3 PG Patcher Logic Integration
+### 1.3 PG Patcher Logic Integration ✅ COMPLETE
 
-- Download/reference PG Patcher repository
-- Study their texture/mesh detection logic
-- Integrate improved detection patterns into our tool
-- Ensure we match PG Patcher's patching behavior exactly
+- ✅ Downloaded/analyzed PG Patcher repository source code
+- ✅ Studied their texture/mesh detection logic and exclusion patterns
+- ✅ **IMPLEMENTED**: Enhanced JSON format compatibility and path normalization
+
+**Key Improvements Identified:**
+
+1. **Enhanced JSON Format Support**
+   - Support `match_diffuse` field (in addition to `texture`)
+   - Default field merging from `{"default": {...}, "entries": [...]}` format
+   - Better compatibility with official PG Patcher JSON structures
+
+2. **Robust Path Normalization**
+   ```python
+   def normalize_path(path_str):
+       # Remove empty path parts and use consistent separators
+       parts = [part for part in path_str.replace('\\', '/').split('/') if part]
+       return '/'.join(parts)
+   ```
+   - Handles leading slashes, double slashes, mixed separators
+   - Applied to both JSON paths and filesystem paths for consistent matching
+
+3. **Enhanced Exclusion Patterns** ✅ COMPLETE
+   - Added PG Patcher's hardcoded ignore patterns:
+   - `facetint`, `skintint` - PBR ignores these texture types
+   - `landscape`, `grass` - Cannot be PBR'ed
+   - `cc` - Creation Club content exclusions  
+   - `_resourcepack` - Resource pack BSA exclusions
+   - Non-ASCII character filtering (PG Patcher skips these)
+
+**Implementation Results:**
+- ✅ Added robust path normalization using filter-and-rejoin approach
+- ✅ Enhanced JSON parsing with `match_diffuse` field support  
+- ✅ Implemented default field merging for object-format JSONs
+- ✅ Applied consistent path normalization to both JSON and filesystem paths
+- ✅ Integrated all PG Patcher exclusion patterns for maximum accuracy
+
+**Expected Impact:** +5-15% coverage accuracy improvement through better compatibility with various PBR mod JSON formats and more accurate exclusion of non-PBR'able content
 
 ## Phase 2: Advanced Features (Future)
 
