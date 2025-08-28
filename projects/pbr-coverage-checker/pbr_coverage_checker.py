@@ -13,23 +13,28 @@ class PBRCoverageChecker(mobase.IPluginTool):
         self.__organizer = None
         self.__parentWidget = None
         
-        # Known texture suffixes from PG Patcher source code (order matters - check longer ones first)  
-        # From PGPatcher\PGLib\src\util\NIFUtil.cpp texture suffix map
+        # Known texture suffixes from PG Patcher wiki and source code (order matters - check longer ones first)
+        # From: https://github.com/hakasapl/PGPatcher/wiki/Mod-Authors
+        # Combined with PGPatcher\PGLib\src\util\NIFUtil.cpp texture suffix map
         self.pbr_suffixes = [
             '_envmask',  # Environment mask (full name)
             '_rmaos',    # Combined roughness/metallicness/AO/subsurface
+            '_flow',     # Hair flow map
+            '_cnr',      # Coat normal roughness
             '_msn',      # Model space normal
             '_em',       # Environment mask (short form)
+            '_bl',       # Backlight (alternative to _b)
             '_sk',       # Skin tint
-            '_b',        # Unknown but seen in mods (variant texture?)
-            '_d',        # Diffuse
-            '_e',        # Cubemap
-            '_f',        # Fuzz PBR
-            '_g',        # Emissive
-            '_i',        # Inner layer (multilayer)
+            '_b',        # Backlight
+            '_d',        # Diffuse (standard or without suffix)
+            '_e',        # Environment/Cubemap
+            '_f',        # Fuzz
+            '_g',        # Glow/Emissive
+            '_i',        # Inner layer
             '_m',        # Environment mask (can be parallax in ENB)
             '_n',        # Normal
-            '_p',        # Parallax/Height
+            '_p',        # Height/Parallax
+            '_s',        # Subsurface tint
             'mask',      # Diffuse mask (no underscore!)
         ]
     
@@ -129,6 +134,11 @@ class PBRCoverageChecker(mobase.IPluginTool):
             debug_info.append("=== Enhanced PBR Coverage Analysis (v1.3) ===")
             debug_info.append("Features: match_diffuse support, default merging, path normalization")
             debug_info.append("Enhanced exclusions: facetint, skintint, landscape, grass, cc, _resourcepack, non-ASCII")
+            debug_info.append(f"Processing {len(enabled_mods)} enabled mods:")
+            for mod_name, _ in enabled_mods[:10]:  # Show first 10 mod names
+                debug_info.append(f"  - {mod_name}")
+            if len(enabled_mods) > 10:
+                debug_info.append(f"  ... and {len(enabled_mods) - 10} more")
             
             for mod_name, mod_path in enabled_mods:
                 self._scan_pbr_coverage(mod_name, mod_path, pbr_covered_textures, debug_info)
@@ -215,6 +225,7 @@ class PBRCoverageChecker(mobase.IPluginTool):
                     
                     # Extract texture name - support both 'texture' and 'match_diffuse' fields
                     texture_name = None
+                    base_texture_path = None
                     if 'match_diffuse' in merged_entry:
                         texture_name = merged_entry['match_diffuse']
                     elif 'texture' in merged_entry:
@@ -229,6 +240,23 @@ class PBRCoverageChecker(mobase.IPluginTool):
                             texture_path = f"{texture_name}.dds"
                         else:
                             texture_path = f"{texture_dir}/{texture_name}.dds"
+                        
+                        # Handle path-less texture names 
+                        if '/' not in texture_name and '\\' not in texture_name:
+                            # This is a simple filename - use the JSON's directory structure to build the path
+                            # The JSON file location indicates where the texture should be found
+                            if texture_dir != '.':
+                                # Use the JSON's directory path as the texture path
+                                texture_path = f"{texture_dir}/{texture_name}.dds"
+                            else:
+                                # Fallback: try to find it in the mod's PBR structure
+                                pbr_mod_path = Path(mod_path) / "textures" / "PBR"
+                                if pbr_mod_path.exists():
+                                    for found_file in pbr_mod_path.rglob(f"{texture_name}.dds"):
+                                        # Found the file, use its actual path relative to textures/
+                                        relative_path = found_file.relative_to(Path(mod_path) / "textures")
+                                        texture_path = str(relative_path).replace('\\', '/')
+                                        break
                         
                         # Normalize the full path too
                         texture_path = self._normalize_path(texture_path)
@@ -255,6 +283,30 @@ class PBRCoverageChecker(mobase.IPluginTool):
                             
                             if json_count <= 5:
                                 debug_info.append(f"PBR Coverage: {json_file.name} covers {texture_path} (base: {base_texture_path})")
+                    
+                    # Also check for slot commands (slot2, slot3, etc.) - these indicate PBR coverage
+                    for key in merged_entry:
+                        if key.startswith('slot') and key[4:].isdigit():
+                            slot_texture_path = merged_entry[key]
+                            if slot_texture_path:
+                                # Remove "textures/" prefix if present and normalize
+                                if slot_texture_path.lower().startswith('textures/'):
+                                    slot_texture_path = slot_texture_path[9:]
+                                elif slot_texture_path.lower().startswith('textures\\'):
+                                    slot_texture_path = slot_texture_path[9:]
+                                
+                                slot_texture_path = self._normalize_path(slot_texture_path)
+                                
+                                # Get base texture name (strip PBR suffixes)
+                                base_slot_path = self._get_base_texture_name(slot_texture_path).lower()
+                                
+                                # Don't double-count if we already added this texture from the main texture field
+                                if base_texture_path is None or base_slot_path != base_texture_path:
+                                    pbr_covered_textures[base_slot_path].add(mod_name)
+                                    json_count += 1
+                                    
+                                    if json_count <= 5:
+                                        debug_info.append(f"PBR Coverage ({key}): {json_file.name} covers {slot_texture_path} (base: {base_slot_path})")
                             
             except Exception as e:
                 debug_info.append(f"Error reading {json_file}: {str(e)}")
@@ -323,7 +375,7 @@ class PBRCoverageChecker(mobase.IPluginTool):
             regular_textures[base_texture_path].add(mod_name)
             base_textures_found.add(base_texture_path)
         
-        if base_textures_found:
+        if base_textures_found or total_files_processed > 0:
             debug_info.append(f"'{mod_name}': Found {len(base_textures_found)} unique base textures from {total_files_processed} files, excluded {excluded_count} technical paths")
 
     def _find_coverage_analysis(self, pbr_covered_textures, regular_textures):
@@ -415,9 +467,10 @@ class PBRCoverageChecker(mobase.IPluginTool):
             results_widget.setReadOnly(True)
             results_text = ""
             
-            # Show mods that have some coverage, sorted by coverage percentage
+            # Show all mods that have textures, including zero coverage ones
             mods_with_coverage = {}
-            for mod_name in covered_mods.keys():
+            all_texture_mods = set(covered_mods.keys()) | set(uncovered_mods.keys())
+            for mod_name in all_texture_mods:
                 # Count base textures, not texture variants
                 total_textures = len([p for p, mods in regular_textures.items() if mod_name in mods])
                 covered_count = len(covered_mods[mod_name])
@@ -443,6 +496,18 @@ class PBRCoverageChecker(mobase.IPluginTool):
                 else:
                     partially_covered.append(mod_name)
             
+            # Sort partially covered by coverage percentage for further subdivision
+            partially_covered.sort(key=lambda x: mods_with_coverage[x]['coverage_percent'], reverse=True)
+            
+            # Split partially covered into detailed view and bottom 20% simple view
+            if len(partially_covered) > 0:
+                bottom_20_percent_count = max(1, len(partially_covered) // 5)  # At least 1 mod
+                detailed_partial = partially_covered[:-bottom_20_percent_count]
+                bottom_20_partial = partially_covered[-bottom_20_percent_count:]
+            else:
+                detailed_partial = []
+                bottom_20_partial = []
+            
             # Show fully covered mods in condensed format
             if fully_covered:
                 results_text += "\n✓ Fully covered by PBR\n"
@@ -453,17 +518,17 @@ class PBRCoverageChecker(mobase.IPluginTool):
                     pbr_list = f"[{', '.join(pbr_mods)}]" if pbr_mods else ""
                     results_text += f"  {mod_name} {pbr_list}\n"
             
-            # Show partially covered mods in detailed format
-            if partially_covered:
+            # Show partially covered mods with reasonable coverage in detailed format
+            if detailed_partial:
                 if fully_covered:  # Add separator if we showed fully covered mods
                     results_text += "\nPartial PBR coverage:\n"
                     results_text += "------------------------------------\n"
                 
-                # Sort by coverage percentage (most covered first)
-                for mod_name in sorted(partially_covered, key=lambda x: mods_with_coverage[x]['coverage_percent'], reverse=True):
+                # Already sorted by coverage percentage (most covered first) 
+                for mod_name in detailed_partial:
                     mod_data = mods_with_coverage[mod_name]
                     results_text += f"\n{mod_name}\n"
-                    results_text += f"  Coverage: {mod_data['covered_count']}/{mod_data['total_textures']} base textures ({mod_data['coverage_percent']:.1f}%)\n"
+                    results_text += f"  PBR Coverage: {mod_data['coverage_percent']:.1f}% ({mod_data['covered_count']}/{mod_data['total_textures']} base textures)\n"
                     
                     # Show which mods are providing PBR coverage
                     if mod_name in coverage_providers and coverage_providers[mod_name]:
@@ -475,6 +540,18 @@ class PBRCoverageChecker(mobase.IPluginTool):
                         results_text += f"    - {texture}\n"
                     if len(mod_data['uncovered_textures']) > 8:
                         results_text += f"    ... and {len(mod_data['uncovered_textures']) - 8} more\n"
+            
+            # Show bottom 20% of partially covered mods in condensed format
+            if bottom_20_partial:
+                if fully_covered or detailed_partial:
+                    results_text += "\n❌ Minimal PBR coverage (bottom 20%):\n"
+                    results_text += "------------------------------------\n"
+                
+                for mod_name in bottom_20_partial:
+                    mod_data = mods_with_coverage[mod_name]
+                    pbr_mods = sorted(list(coverage_providers.get(mod_name, [])))
+                    pbr_list = f" [{', '.join(pbr_mods)}]" if pbr_mods else ""
+                    results_text += f"  {mod_name} ({mod_data['coverage_percent']:.1f}%){pbr_list}\n"
             
             results_widget.setPlainText(results_text)
             layout.addWidget(results_widget)
@@ -513,9 +590,10 @@ class PBRCoverageChecker(mobase.IPluginTool):
                     if covered_mods:
                         f.write("Potentially Redundant Mods (with PBR coverage gaps):\n\n")
                         
-                        # Create coverage data like in the UI
+                        # Create coverage data like in the UI - include all mods with textures
                         mods_with_coverage = {}
-                        for mod_name in covered_mods.keys():
+                        all_texture_mods = set(covered_mods.keys()) | set(uncovered_mods.keys())
+                        for mod_name in all_texture_mods:
                             # Count base textures, not texture variants
                             total_textures = len([p for p, mods in regular_textures.items() if mod_name in mods])
                             covered_count = len(covered_mods[mod_name])
@@ -541,6 +619,18 @@ class PBRCoverageChecker(mobase.IPluginTool):
                             else:
                                 partially_covered.append(mod_name)
                         
+                        # Sort partially covered by coverage percentage for further subdivision
+                        partially_covered.sort(key=lambda x: mods_with_coverage[x]['coverage_percent'], reverse=True)
+                        
+                        # Split partially covered into detailed view and bottom 20% simple view
+                        if len(partially_covered) > 0:
+                            bottom_20_percent_count = max(1, len(partially_covered) // 5)  # At least 1 mod
+                            detailed_partial = partially_covered[:-bottom_20_percent_count]
+                            bottom_20_partial = partially_covered[-bottom_20_percent_count:]
+                        else:
+                            detailed_partial = []
+                            bottom_20_partial = []
+                        
                         # Export fully covered mods in condensed format
                         if fully_covered:
                             f.write("\n✓ Fully covered by PBR\n")
@@ -551,17 +641,17 @@ class PBRCoverageChecker(mobase.IPluginTool):
                                 pbr_list = f"[{', '.join(pbr_mods)}]" if pbr_mods else ""
                                 f.write(f"  {mod_name} {pbr_list}\n")
                         
-                        # Export partially covered mods in detailed format
-                        if partially_covered:
+                        # Export partially covered mods with reasonable coverage in detailed format
+                        if detailed_partial:
                             if fully_covered:  # Add separator if we showed fully covered mods
                                 f.write("\nPartial PBR coverage:\n")
                                 f.write("------------------------------------\n")
                             
-                            # Sort by coverage percentage (most covered first)
-                            for mod_name in sorted(partially_covered, key=lambda x: mods_with_coverage[x]['coverage_percent'], reverse=True):
+                            # Already sorted by coverage percentage (most covered first)
+                            for mod_name in detailed_partial:
                                 mod_data = mods_with_coverage[mod_name]
                                 f.write(f"\n{mod_name}\n")
-                                f.write(f"  Coverage: {mod_data['covered_count']}/{mod_data['total_textures']} base textures ({mod_data['coverage_percent']:.1f}%)\n")
+                                f.write(f"  PBR Coverage: {mod_data['coverage_percent']:.1f}% ({mod_data['covered_count']}/{mod_data['total_textures']} base textures)\n")
                                 
                                 # Show which mods are providing PBR coverage
                                 if mod_name in coverage_providers and coverage_providers[mod_name]:
@@ -572,6 +662,19 @@ class PBRCoverageChecker(mobase.IPluginTool):
                                 for texture in sorted(mod_data['uncovered_textures']):
                                     f.write(f"    - {texture}\n")
                                 f.write("\n")
+                        
+                        # Export bottom 20% of partially covered mods in condensed format
+                        if bottom_20_partial:
+                            if fully_covered or detailed_partial:
+                                f.write("\n❌ Minimal PBR coverage (bottom 20%):\n")
+                                f.write("------------------------------------\n")
+                            
+                            for mod_name in bottom_20_partial:
+                                mod_data = mods_with_coverage[mod_name]
+                                pbr_mods = sorted(list(coverage_providers.get(mod_name, [])))
+                                pbr_list = f" [{', '.join(pbr_mods)}]" if pbr_mods else ""
+                                f.write(f"  {mod_name} ({mod_data['coverage_percent']:.1f}%){pbr_list}\n")
+                            f.write("\n")
                     else:
                         f.write("No mods found with PBR coverage.\n")
                 
