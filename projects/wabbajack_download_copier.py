@@ -8,6 +8,69 @@ from PyQt6.QtWidgets import *
 import mobase
 
 
+def format_file_size(size_bytes):
+    """Format file size in human-readable format"""
+    if size_bytes == 0:
+        return "0 B"
+    
+    size_names = ["B", "KB", "MB", "GB", "TB"]
+    i = 0
+    while size_bytes >= 1024 and i < len(size_names) - 1:
+        size_bytes /= 1024.0
+        i += 1
+    
+    if i == 0:
+        return f"{int(size_bytes)} {size_names[i]}"
+    else:
+        return f"{size_bytes:.2f} {size_names[i]}"
+
+
+def get_disk_usage(path):
+    """Get disk usage statistics for the given path"""
+    try:
+        path = Path(path)
+        
+        if os.name == 'nt':  # Windows
+            import ctypes
+            
+            # For Windows, we need to get the root drive path
+            # Convert D:\Modlists\NS3 PBR\downloads to D:\
+            drive_path = str(path.anchor)  # Gets "D:\" from the path
+            
+            free_bytes = ctypes.c_ulonglong(0)
+            total_bytes = ctypes.c_ulonglong(0)
+            result = ctypes.windll.kernel32.GetDiskFreeSpaceExW(
+                ctypes.c_wchar_p(drive_path),
+                ctypes.pointer(free_bytes),
+                ctypes.pointer(total_bytes),
+                None
+            )
+            
+            if result:
+                return free_bytes.value, total_bytes.value
+            else:
+                # Fallback: try with the full path
+                result = ctypes.windll.kernel32.GetDiskFreeSpaceExW(
+                    ctypes.c_wchar_p(str(path)),
+                    ctypes.pointer(free_bytes),
+                    ctypes.pointer(total_bytes),
+                    None
+                )
+                if result:
+                    return free_bytes.value, total_bytes.value
+                else:
+                    return None, None
+        else:  # Unix-like
+            statvfs = os.statvfs(str(path))
+            free_bytes = statvfs.f_frsize * statvfs.f_bavail
+            total_bytes = statvfs.f_frsize * statvfs.f_blocks
+            return free_bytes, total_bytes
+    except Exception as e:
+        # Return debug info in case we need to troubleshoot
+        print(f"Disk usage error: {e}")
+        return None, None
+
+
 class WabbajackDownloadCopier(mobase.IPluginTool):
     def __init__(self):
         super().__init__()
@@ -144,6 +207,30 @@ class WabbajackDownloadCopier(mobase.IPluginTool):
         self._debug_info = debug_info
         return mod_downloads, missing_downloads
 
+    def calculate_copy_size(self, mod_downloads):
+        """Calculate total size of files to be copied (including meta files)"""
+        total_size = 0
+        file_count = 0
+        
+        for mod_name, download_path in mod_downloads.items():
+            try:
+                # Main download file
+                if os.path.exists(download_path):
+                    total_size += os.path.getsize(download_path)
+                    file_count += 1
+                
+                # Meta file
+                meta_path = download_path + ".meta"
+                if os.path.exists(meta_path):
+                    total_size += os.path.getsize(meta_path)
+                    file_count += 1
+                    
+            except OSError:
+                # Skip files we can't access
+                continue
+        
+        return total_size, file_count
+
     def generate_missing_downloads_report(self, missing_downloads, report_path):
         """Generate a detailed report of missing downloads"""
         try:
@@ -254,6 +341,8 @@ class WabbajackCopyDialog(QDialog):
         self.mod_downloads = {}
         self.missing_downloads = []
         self.copy_worker = None
+        self.total_copy_size = 0
+        self.total_file_count = 0
         
         self.setWindowTitle("Wabbajack Download Copier")
         self.setModal(True)
@@ -261,6 +350,10 @@ class WabbajackCopyDialog(QDialog):
         
         self.init_ui()
         self.scan_downloads()
+        
+        # Connect destination path changes to disk space updates
+        self.dest_path_edit.textChanged.connect(self.update_disk_space_display)
+        self.update_disk_space_display()  # Initial update
 
     def init_ui(self):
         layout = QVBoxLayout(self)
@@ -307,6 +400,12 @@ class WabbajackCopyDialog(QDialog):
         path_layout.addWidget(use_default_btn)
         
         dest_layout.addLayout(path_layout)
+        
+        # Disk space info
+        self.disk_space_label = QLabel("")
+        self.disk_space_label.setStyleSheet("color: #666; font-size: 11px; margin-top: 5px;")
+        dest_layout.addWidget(self.disk_space_label)
+        
         layout.addWidget(dest_group)
         
         # Results display
@@ -329,6 +428,12 @@ class WabbajackCopyDialog(QDialog):
         self.results_tabs.addTab(self.debug_widget, "Debug Info")
         
         layout.addWidget(self.results_tabs)
+        
+        # Size and disk space info
+        self.size_info_label = QLabel("")
+        self.size_info_label.setStyleSheet("font-weight: bold; color: #0066cc; margin: 10px 0;")
+        self.size_info_label.setVisible(False)
+        layout.addWidget(self.size_info_label)
         
         # Progress bar
         self.progress_bar = QProgressBar()
@@ -374,6 +479,49 @@ class WabbajackCopyDialog(QDialog):
             self.dest_path_edit.setText(folder)
             self.update_buttons()
 
+    def update_disk_space_display(self):
+        """Update the disk space display when destination path changes"""
+        destination = self.dest_path_edit.text().strip()
+        
+        if not destination:
+            self.disk_space_label.setText("")
+            return
+        
+        try:
+            # Check if the path exists or try to get its parent that exists
+            path_to_check = Path(destination)
+            while not path_to_check.exists() and path_to_check.parent != path_to_check:
+                path_to_check = path_to_check.parent
+            
+            if path_to_check.exists():
+                free_space, total_space = get_disk_usage(path_to_check)
+                
+                if free_space is not None and total_space is not None:
+                    used_space = total_space - free_space
+                    usage_percent = (used_space / total_space) * 100 if total_space > 0 else 0
+                    
+                    # Color coding based on available space
+                    if free_space < 1024 * 1024 * 1024:  # Less than 1GB
+                        color = "red"
+                    elif free_space < 10 * 1024 * 1024 * 1024:  # Less than 10GB
+                        color = "orange"
+                    else:
+                        color = "#666"
+                    
+                    space_text = (f"Drive space: {format_file_size(free_space)} free of "
+                                f"{format_file_size(total_space)} ({usage_percent:.1f}% used)")
+                    
+                    self.disk_space_label.setText(space_text)
+                    self.disk_space_label.setStyleSheet(f"color: {color}; font-size: 11px; margin-top: 5px;")
+                else:
+                    self.disk_space_label.setText("Could not detect drive space")
+                    self.disk_space_label.setStyleSheet("color: #999; font-size: 11px; margin-top: 5px;")
+            else:
+                self.disk_space_label.setText("")
+        except Exception:
+            self.disk_space_label.setText("Could not detect drive space")
+            self.disk_space_label.setStyleSheet("color: #999; font-size: 11px; margin-top: 5px;")
+
     def scan_downloads(self):
         self.refresh_btn.setEnabled(False)
         self.refresh_btn.setText("Scanning...")
@@ -405,13 +553,26 @@ class WabbajackCopyDialog(QDialog):
         self.missing_widget.setPlainText("\n".join(missing_text))
         self.results_tabs.setTabText(1, f"Missing Downloads ({len(self.missing_downloads)})")
         
+        # Calculate total size of files to copy
+        self.total_copy_size, self.total_file_count = copier.calculate_copy_size(self.mod_downloads)
+        
         # Update debug tab
         if hasattr(copier, '_debug_info'):
             debug_text = "\n".join(copier._debug_info)
             debug_text += f"\n\nFinal Results:\n"
             debug_text += f"- Found downloads: {len(self.mod_downloads)}\n"
             debug_text += f"- Missing downloads: {len(self.missing_downloads)}\n"
+            debug_text += f"- Total copy size: {format_file_size(self.total_copy_size)}\n"
+            debug_text += f"- Total files to copy: {self.total_file_count}\n"
             self.debug_widget.setPlainText(debug_text)
+        
+        # Update size info display
+        if self.mod_downloads:
+            size_text = f"Total size to copy: {format_file_size(self.total_copy_size)} ({self.total_file_count} files)"
+            self.size_info_label.setText(size_text)
+            self.size_info_label.setVisible(True)
+        else:
+            self.size_info_label.setVisible(False)
         
         self.refresh_btn.setEnabled(True)
         self.refresh_btn.setText("Refresh Scan")
@@ -465,11 +626,47 @@ class WabbajackCopyDialog(QDialog):
             QMessageBox.warning(self, "No Downloads", "No download files found to copy.")
             return
         
+        # Check disk space
+        free_space, total_space = get_disk_usage(destination)
+        
+        if free_space is not None:
+            if self.total_copy_size > free_space:
+                # Not enough space - show error
+                QMessageBox.critical(
+                    self,
+                    "Insufficient Disk Space",
+                    f"Not enough disk space!\n\n"
+                    f"Required: {format_file_size(self.total_copy_size)}\n"
+                    f"Available: {format_file_size(free_space)}\n"
+                    f"Shortfall: {format_file_size(self.total_copy_size - free_space)}\n\n"
+                    f"Please free up disk space or choose a different destination."
+                )
+                return
+            elif self.total_copy_size > free_space * 0.9:  # Less than 10% free space remaining
+                # Warn about low disk space but allow to continue
+                reply = QMessageBox.question(
+                    self,
+                    "Low Disk Space Warning",
+                    f"Warning: This operation will use most of your available disk space!\n\n"
+                    f"Required: {format_file_size(self.total_copy_size)}\n"
+                    f"Available: {format_file_size(free_space)}\n"
+                    f"Remaining after copy: {format_file_size(free_space - self.total_copy_size)}\n\n"
+                    f"Continue anyway?",
+                    QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
+                )
+                if reply != QMessageBox.StandardButton.Yes:
+                    return
+        
         # Confirm operation
+        size_info = f"Total size: {format_file_size(self.total_copy_size)} ({self.total_file_count} files)"
+        if free_space is not None:
+            size_info += f"\nFree space after copy: {format_file_size(free_space - self.total_copy_size)}"
+        
         reply = QMessageBox.question(
             self, 
             "Confirm Copy Operation",
-            f"Copy {len(self.mod_downloads)} download files to:\n{destination}\n\nThis operation may take some time.",
+            f"Copy {len(self.mod_downloads)} download files to:\n{destination}\n\n"
+            f"{size_info}\n\nThis operation may take some time.",
             QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
         )
         
