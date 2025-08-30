@@ -1,0 +1,1141 @@
+=============================================
+Organizer and Management Interfaces
+=============================================
+
+This document contains the core management interfaces that MO2 plugin developers use most frequently to interact with the mod organizer system.
+
+.. py:class:: IOrganizer
+
+   Interface to class that provides information about the running session
+   of Mod Organizer to be used by plugins.
+
+
+   .. py:method:: appVersion() -> VersionInfo
+
+      :returns: The running version of Mod Organizer.
+
+
+
+   .. py:method:: basePath() -> str
+
+      :returns: The absolute path to the base directory of Mod Organizer.
+
+
+
+   .. py:method:: createMod(name: GuessedString) -> IModInterface
+
+      Create a new mod with the specified name.
+
+      If a mod with the same name already exists, the user will be queried. If the user chooses
+      to merge or replace, the call will succeed, otherwise the call will fail.
+
+      :param name: Name of the mod to create.
+
+      :returns: An interface to the newly created mod that can be used to modify it, or `None` if the mod
+
+      could not be created.
+
+
+
+   .. py:method:: createNexusBridge() -> IModRepositoryBridge
+
+      Create a new Nexus interface.
+
+      :returns: The newly created Nexus interface.
+
+
+
+   .. py:method:: downloadManager() -> IDownloadManager
+
+      :returns: The interface to the download manager.
+
+
+
+   .. py:method:: downloadsPath() -> str
+
+      :returns: The absolute path to the download directory.
+
+
+
+   .. py:method:: findFileInfos(path: Union[str, os.PathLike[str], PyQt6.QtCore.QDir], filter: Callable[[FileInfo], bool]) -> Sequence[FileInfo]
+
+      Find files in the virtual directory matching the specified filter.
+
+      :param path: The path to search in (relative to the 'data' folder).
+      :param filter: The function to use to filter files. Should return True for the files to keep.
+
+      :returns: The list of `QFileInfo` corresponding to the matching files.
+
+
+
+   .. py:method:: findFiles(path: Union[str, os.PathLike[str], PyQt6.QtCore.QDir], filter: Callable[[str], bool]) -> Sequence[str]
+                  findFiles(path: Union[str, os.PathLike[str], PyQt6.QtCore.QDir], patterns: Sequence[str]) -> Sequence[str]
+                  findFiles(path: Union[str, os.PathLike[str], PyQt6.QtCore.QDir], pattern: str) -> Sequence[str]
+
+      Find files in the given folder that matches the given glob pattern.
+
+      :param path: The path to search in (relative to the 'data' folder).
+      :param pattern: The glob pattern to use to filter files.
+
+      :returns: The list of matching files.
+
+
+
+   .. py:method:: gameFeatures() -> IGameFeatures
+
+      :returns: The interface to the game features.
+
+
+
+   .. py:method:: getFileOrigins(filename: str) -> Sequence[str]
+
+      Retrieve the file origins for the specified file.
+
+      The origins are listed with their internal name. The internal name of a mod can differ
+      from the display name for disambiguation.
+
+      :param filename: Path to the file to retrieve origins for (relative to the 'data' folder).
+
+      :returns: The list of origins that contain the specified file, sorted by their priority.
+
+
+
+   .. py:method:: getGame(name: str) -> IPluginGame
+
+      Retrieve the game plugin matching the given name.
+
+      :param name: Name of the game (short name).
+
+      :returns: The plugin for the given game, or `None` if none was found.
+
+
+
+   .. py:method:: getPluginDataPath() -> str
+      :staticmethod:
+
+
+      :returns: The directory for plugin data, typically plugins/data.
+
+
+
+   .. py:method:: installMod(filename: Union[str, os.PathLike[str], PyQt6.QtCore.QFileInfo], name_suggestion: str = '') -> IModInterface
+
+      Install a mod archive at the specified location.
+
+      :param filename: Absolute filepath to the archive to install.
+      :param name_suggestion: Suggested name for this mod. This can still be changed by the user.
+
+      :returns: An interface to the new installed mod, or `None` if no installation took place (canceled or failure).
+
+
+
+   .. py:method:: isPluginEnabled(plugin: IPlugin) -> bool
+                  isPluginEnabled(plugin: str) -> bool
+
+      Check if a plugin is enabled.
+
+      :param plugin: The name of the plugin to check.
+
+      :returns: True if the plugin is enabled, False otherwise.
+
+
+
+   .. py:method:: listDirectories(directory: str) -> Sequence[str]
+
+      Retrieve the list of (virtual) subdirectories in the given path.
+
+      :param directory: Path to the directory to list (relative to the 'data' folder).
+
+      :returns: The list of directories in the given directory.
+
+
+
+   .. py:method:: managedGame() -> IPluginGame
+
+      :returns: The plugin corresponding to the current game.
+
+
+
+   .. py:method:: modDataChanged(mod: IModInterface) -> None
+
+      Notify the organizer that the given mod has changed.
+
+      :param mod: The mod that has changed.
+
+
+
+   .. py:method:: modList() -> IModList
+
+      :returns: The interface to the mod list.
+
+
+
+   .. py:method:: modsPath() -> str
+
+      :returns: The (absolute) path to the mods directory.
+
+
+
+   .. py:method:: onAboutToRun(callback: Callable[[str, PyQt6.QtCore.QDir, str], bool]) -> bool
+                  onAboutToRun(callback: Callable[[str], bool]) -> bool
+
+      Install a new handler to be called when an application is about to run.
+
+      Multiple handlers can be installed. If any of the handler returns `False`, the
+      application will not run.
+
+      :param callback: The function to call when an application is about to run. The parameter
+                       is the absolute path to the application to run. The function can return False
+                       to prevent the application from running.
+
+      :returns: True if the handler was installed properly (there are currently no reasons for
+
+      this to fail).
+
+
+
+   .. py:method:: onFinishedRun(callback: Callable[[str, int], None]) -> bool
+
+      Install a new handler to be called when an application has finished running.
+
+      :param callback: The function to call when an application has finished running. The first parameter is the absolute
+                       path to the application, and the second parameter is the exit code of the application.
+
+      :returns: True if the handler was installed properly (there are currently no reasons for
+
+      this to fail).
+
+
+
+   .. py:method:: onNextRefresh(callback: Callable[[], None], immediate_if_possible: bool = True) -> bool
+
+      Install a new handler to be called on the next refresh or immediately.
+
+      :param callback: Function to call on the next refresh (or immediately).
+      :param immediate_if_possible: If True, immediately run the callback if no refresh is currently running.
+
+      :returns: True if the handler was installed properly (there are currently no reasons for
+
+      this to fail).
+
+
+
+   .. py:method:: onPluginDisabled(callback: Callable[[IPlugin], None]) -> None
+                  onPluginDisabled(name: str, callback: Callable[[], None]) -> None
+
+      Install a new handler to be called when the given plugin is disabled.
+
+      :param name: Name of the plugin to watch.
+      :param callback: The function to call when the plugin is disabled.
+
+
+
+   .. py:method:: onPluginEnabled(callback: Callable[[IPlugin], None]) -> None
+                  onPluginEnabled(name: str, callback: Callable[[], None]) -> None
+
+      Install a new handler to be called when the given plugin is enabled.
+
+      :param name: Name of the plugin to watch.
+      :param callback: The function to call when the plugin is enabled.
+
+
+
+   .. py:method:: onPluginSettingChanged(callback: Callable[[str, str, MoVariant, MoVariant], None]) -> bool
+
+      Install a new handler to be called when a plugin setting is changed.
+
+      :param callback: The function to call when a plugin setting is changed. The parameters are: The name of the plugin, the
+                       name of the setting, the old value (or `None` if the setting did not exist before) and the new value
+                       of the setting (or `None` if the setting has been removed).
+
+      :returns: True if the handler was installed properly (there are currently no reasons for this to fail).
+
+
+
+   .. py:method:: onProfileChanged(callback: Callable[[IProfile, IProfile], None]) -> bool
+
+      Install a new handler to be called when the current profile is changed.
+
+      The function is called when the profile is changed but some operations related to
+      the profile might not be finished when this is called (e.g., the virtual file system
+      might not be up-to-date).
+
+      :param callback: The function to call when the current profile is changed. The first parameter is the old profile (can
+                       be `None`, e.g. at startup), and the second parameter is the new profile (cannot be `None`).
+
+      :returns: True if the handler was installed properly (there are currently no reasons for this to fail).
+
+
+
+   .. py:method:: onProfileCreated(callback: Callable[[IProfile], None]) -> bool
+
+      Install a new handler to be called when a new profile is created.
+
+      :param callback: The function to call when a new profile is created. The parameter is the new profile (can be
+                       a temporary object and should not be stored).
+
+      :returns: True if the handler was installed properly (there are currently no reasons for this to fail).
+
+
+
+   .. py:method:: onProfileRemoved(callback: Callable[[str], None]) -> bool
+
+      Install a new handler to be called when a profile is remove.
+
+      The callbacks are called after the profile has been removed so the profile is not accessible
+      anymore.
+
+      :param callback: The function to call when a profile is remove. The parameter is the name of the profile that was
+                       removed.
+
+      :returns: True if the handler was installed properly (there are currently no reasons for this to fail).
+
+
+
+   .. py:method:: onProfileRenamed(callback: Callable[[IProfile, str, str], None]) -> bool
+
+      Install a new handler to be called when a profile is renamed.
+
+      :param callback: The function to call when a profile is renamed. The first parameter is the profile being renamed,
+                       the second parameter the previous name and the third parameter the new name.
+
+      :returns: True if the handler was installed properly (there are currently no reasons for this to fail).
+
+
+
+   .. py:method:: onUserInterfaceInitialized(callback: Callable[[PyQt6.QtWidgets.QMainWindow], None]) -> bool
+
+      Install a new handler to be called when the UI has been fully initialized.
+
+      :param callback: The function to call when the user-interface has been fully initialized. The parameter is the main
+                       window of the application (`QMainWindow`).
+
+      :returns: True if the handler was installed properly (there are currently no reasons for this to fail).
+
+
+
+   .. py:method:: overwritePath() -> str
+
+      :returns: The (absolute) path to the overwrite directory.
+
+
+
+   .. py:method:: persistent(plugin_name: str, key: str, default: MoVariant = None) -> MoVariant
+
+      Retrieve the specified persistent value for a plugin.
+
+      A persistent is an arbitrary value that the plugin can set and retrieve that is persistently stored
+      by the main application. There is no UI for the user to change this value but they can directly access
+      the storage
+
+      :param plugin_name: Name of the plugin for which to retrieve the value. This should always be `IPlugin.name()` unless you have a
+                          really good reason to access data of another mod AND if you can verify that plugin is actually installed.
+      :param key: Identifier of the setting.
+      :param default: Default value to return if the key is not set (yet).
+
+      :returns: The value corresponding to the given persistent setting, or `def` is the key is not found.
+
+
+
+   .. py:method:: pluginDataPath() -> str
+
+      Retrieve the path to a directory where plugin data should be stored.
+
+      For python plugins, it is recommended to use a dedicated folder (per plugin) if you need to
+      store data (resources, or multiple python files).
+
+      :returns: Path to a directory where plugin data should be stored.
+
+
+
+   .. py:method:: pluginList() -> IPluginList
+
+      :returns: The plugin list interface.
+
+
+
+   .. py:method:: pluginSetting(plugin_name: str, key: str) -> MoVariant
+
+      Retrieve settings of plugins.
+
+      :param plugin_name: Name of the plugin to retrieve the setting for.
+      :param key: Name of the setting to retrieve the value for.
+
+      :returns: The value of the setting.
+
+
+
+   .. py:method:: profile() -> IProfile
+
+      :returns: The interface to the current profile.
+
+
+
+   .. py:method:: profileName() -> str
+
+      :returns: The name of the current profile, or an empty string if no profile has been loaded (yet).
+
+
+
+   .. py:method:: profilePath() -> str
+
+      :returns: The absolute path to the active profile or an empty string if no profile has been loaded (yet).
+
+
+
+   .. py:method:: refresh(save_changes: bool = True) -> None
+
+      Refresh the internal mods file structure from disk. This includes the mod list, the plugin
+      list, data tab and other smaller things like problems button (same as pressing F5).
+
+      The main part of the refresh of the mods file structure, mod list and plugin list is done
+      asynchronously, so you should not expect them to be up-to-date when this function returns.
+
+      :param save_changes: If True, the relevant profile information is saved first (enabled mods and order of mods).
+
+
+
+   .. py:method:: resolvePath(filename: Union[str, os.PathLike[str], PyQt6.QtCore.QFileInfo]) -> str
+
+      Resolves a path relative to the virtual data directory to its absolute real path.
+
+      :param filename: Path to resolve.
+
+      :returns: The absolute real path, or an empty string if the path was not found.
+
+
+
+   .. py:method:: setPersistent(plugin_name: str, key: str, value: MoVariant, sync: bool = True) -> None
+
+      Set the specified persistent value for a plugin.
+
+      This does not update the in-memory value for this setting, see `setPluginSetting()` for this.
+
+      :param plugin_name: Name of the plugin for which to change a value. This should always be `IPlugin.name()` unless you have a
+                          really good reason to access data of another mod AND if you can verify that plugin is actually installed.
+      :param key: Identifier of the setting.
+      :param value: New value for the setting.
+      :param sync: If True, the storage is immediately written to disc. This costs performance but is safer against data loss.
+
+
+
+   .. py:method:: setPluginSetting(plugin_name: str, key: str, value: MoVariant) -> None
+
+      Set the specified setting for a plugin.
+
+      This automatically notify handlers register with `onPluginSettingChanged`, so you do not have to do it yourself.
+
+      :param plugin_name: Name of the plugin for which to change a value. This should always be `IPlugin.name()` unless you have a
+                          really good reason to access data of another mod AND if you can verify that plugin is actually installed.
+      :param key: Identifier of the setting.
+      :param value: New value for the setting.
+
+
+
+   .. py:method:: startApplication(executable: Union[str, os.PathLike[str], PyQt6.QtCore.QFileInfo], args: Sequence[str] = [], cwd: Union[str, os.PathLike[str], PyQt6.QtCore.QDir] = '', profile: str = '', forcedCustomOverwrite: str = '', ignoreCustomOverwrite: bool = False) -> int
+
+      Starts an application with virtual filesystem active.
+
+      :param executable: Name or path of the executable. If this is only a filename, it will only work if it has been configured
+                         in MO as an executable. If it is a relative path it is expected to be relative to the game directory.
+      :param args: Arguments to pass to the executable. If the list is empty, and `executable` refers to a configured executable,
+                   the configured arguments are used.
+      :param cwd: The working directory for the executable. If this is empty, the path to the executable is used unless `executable`
+                  referred to a configured MO executable, in which case the configured cwd is used.
+      :param profile: Profile to use. If this is empty (the default) the current profile is used.
+      :param forcedCustomOverwrite: The mod to set as the custom overwrite, regardless of what the profile has configured.
+      :param ignoreCustomOverwrite: Set to true to ignore the profile's configured custom overwrite.
+
+      :returns: The handle to the started application, or 0 if the application failed to start.
+
+
+
+   .. py:method:: virtualFileTree() -> IFileTree
+
+      Retrieve a IFileTree object representing the virtual file tree.
+
+      :returns: An IFileTree representing the virtual file tree.
+
+
+
+   .. py:method:: waitForApplication(handle: int, refresh: bool = True) -> tuple[bool, int]
+
+      Wait for the application corresponding to the given handle to finish.
+
+      This will always show the lock overlay, regardless of whether the
+      user has disabled locking in the setting, so use this with care.
+      Note that the lock overlay will always allow the user to unlock, in
+      which case this will return False.
+
+      :param handle: Handle of the application to wait for (as returned by `startApplication()`).
+      :param refresh: Whether ModOrganizer should refresh after the process completed or not.
+
+      :returns: A tuple `(result, exitcode)`, where `result` is a boolean indicating if the application
+
+      completed successfully, and `exitcode` is the exit code of the application.
+
+
+
+.. py:class:: IModList
+
+   Interface to the mod-list.
+
+   All api functions in this interface work need the internal name of a mod to find a
+   mod. For regular mods (mods the user installed) the display name (as shown to the user)
+   and internal name are identical. For other mods (non-MO mods) there is currently no way
+   to translate from display name to internal name because the display name might not me un-ambiguous.
+
+
+   .. py:method:: allMods() -> Sequence[str]
+
+      :returns: A list containing the internal names of all installed mods.
+
+
+
+   .. py:method:: allModsByProfilePriority(profile: IProfile | None = None) -> Sequence[str]
+
+      :returns: The list of mod (names), sorted according to the current profile priorities.
+
+
+
+   .. py:method:: displayName(name: str) -> str
+
+      Retrieve the display name of a mod from its internal name.
+
+      If you received an internal name from the API (e.g. `IPluginList.origin`) then you should use
+      that name to identify the mod in all other api calls but use this function to retrieve the name
+      to show to the user.
+
+      :param name: Internal name of the mod.
+
+      :returns: The display name of the given mod.
+
+
+
+   .. py:method:: getMod(name: str) -> IModInterface
+
+      Retrieve an interface to a mod using its name.
+
+      :param name: Name of the mod to retrieve.
+
+      :returns: An interface to the given mod, or `None` if there is no mod with this name.
+
+
+
+   .. py:method:: onModInstalled(callback: Callable[[IModInterface], None]) -> bool
+
+      Install a new handler to be called when a new mod is installed.
+
+      :param callback: The function to call when a mod is installed. The parameter of the function is the name of the
+                       newly installed mod.
+
+      :returns: True if the handler was installed properly (there are currently no reasons for this to fail).
+
+
+
+   .. py:method:: onModMoved(callback: Callable[[str, int, int], None]) -> bool
+
+      Install a handler to be called when a mod is moved.
+
+      :param callback: The function to call when a mod is moved. The first argument is the internal name of the
+                       mod, the second argument the old priority and the third argument the new priority.
+
+      :returns: True if the handler was installed properly (there are currently no reasons for this to fail).
+
+
+
+   .. py:method:: onModRemoved(callback: Callable[[str], None]) -> bool
+
+      Install a new handler to be called when a mod is removed.
+
+      :param callback: The function to call when a mod is removed. The parameter of the function is the name of the
+                       removed mod.
+
+      :returns: True if the handler was installed properly (there are currently no reasons for this to fail).
+
+
+
+   .. py:method:: onModStateChanged(callback: Callable[[dict[str, ModState]], None]) -> bool
+
+      Install a handler to be called when mod states change (enabled/disabled, endorsed, ...).
+
+      :param callback: The function to call when the states of mod change. The argument is a map containing the
+                       mods whose states have changed. Keys are internal mod names and values are mod states.
+
+      :returns: True if the handler was installed properly (there are currently no reasons for this to fail).
+
+
+
+   .. py:method:: priority(name: str) -> int
+
+      Retrieve the priority of a mod.
+
+      :param name: Internal name of the mod.
+
+      :returns: The priority of the given mod.
+
+
+
+   .. py:method:: removeMod(mod: IModInterface) -> bool
+
+      Remove a mod (from disc and from the UI).
+
+      :param mod: The mod to remove.
+
+      :returns: True if the mod was removed, False otherwise.
+
+
+
+   .. py:method:: renameMod(mod: IModInterface, name: str) -> IModInterface
+
+      Rename the given mod.
+
+      This method usually invalidates the given mod so you should use the returned value
+      after calling it instead of the passed value.
+
+      :param mod: The mod to rename.
+      :param name: The new name of the mod.
+
+      :returns: A valid reference to the given mod after renaming it.
+
+
+
+   .. py:method:: setActive(names: Sequence[str], active: bool) -> int
+                  setActive(name: str, active: bool) -> bool
+
+      Enable or disable a mod.
+
+      Calling this will cause MO to re-evaluate its virtual file system so this is
+      a fairly expensive call.
+
+      :param name: Internal name of the mod to enable or disable.
+      :param active: True to enable the mod, False to disable it.
+
+      :returns: True on success, False otherwise.
+
+
+
+   .. py:method:: setPriority(name: str, priority: int) -> bool
+
+      Change the priority of a mod.
+
+      `priority` is the new priority after the move. Keep in mind that the mod disappears from its
+      old location and all mods with higher priority than the moved mod decrease in priority by one.
+
+      :param name: Internal name of the mod.
+      :param priority: The new priority of the mod.
+
+      :returns: True if the priority was changed, False otherwise (if the name or priority were invalid).
+
+
+
+   .. py:method:: state(name: str) -> ModState
+
+      Retrieve the state of a mod.
+
+      :param name: Internal name of the mod.
+
+      :returns: The state of the given mod.
+
+
+
+.. py:class:: IModInterface
+
+   .. py:method:: absolutePath() -> str
+
+      :returns: Absolute path to the mod to be used in file system operations.
+
+
+
+   .. py:method:: addCategory(name: str) -> None
+
+      Assign a category to the mod. If the named category does not exist it is created.
+
+      :param name: Name of the new category to assign.
+
+
+
+   .. py:method:: addNexusCategory(category_id: int) -> None
+
+      Set the category id from a nexus category id. Conversion to MO ID happens internally.
+
+      If a mapping is not possible, the category is set to the default value.
+
+      :param category_id: The Nexus category ID.
+
+
+
+   .. py:method:: categories() -> Sequence[str]
+
+      :returns: The list of categories this mod belongs to.
+
+
+
+   .. py:method:: clearPluginSettings(plugin_name: str) -> dict[str, MoVariant]
+
+      Remove all the settings of the specified plugin this mod.
+
+      :param plugin_name: Name of the plugin for which settings should be removed. This should always be `IPlugin.name()`
+                          unless you have a really good reason to access settings of another plugin.
+
+      :returns: The old settings from the given plugin, as returned by `pluginSettings()`.
+
+
+
+   .. py:method:: color() -> PyQt6.QtGui.QColor
+
+      :returns: The color of the 'Notes' column chosen by the user.
+
+
+
+   .. py:method:: comments() -> str
+
+      :returns: The comments for this mod, if any.
+
+
+
+   .. py:method:: converted() -> bool
+
+      Check if the mod was marked as converted by the user.
+
+      When a mod is for a different game, a flag is shown to users to warn them, but
+      they can mark mods as converted to remove this flag.
+
+      :returns: True if this mod was marked as converted by the user.
+
+
+
+   .. py:method:: endorsedState() -> EndorsedState
+
+      :returns: The endorsement state of this mod.
+
+
+
+   .. py:method:: fileTree() -> IFileTree
+
+      Retrieve a file tree corresponding to the underlying disk content of this mod.
+
+      The file tree should not be cached by plugins since it is already and updated when
+      required.
+
+      :returns: A file tree representing the content of this mod.
+
+
+
+   .. py:method:: gameName() -> str
+
+      Retrieve the short name of the game associated with this mod. This may differ
+      from the current game plugin (e.g. you can install a Skyrim LE game in a SSE
+      installation).
+
+      :returns: The name of the game associated with this mod.
+
+
+
+   .. py:method:: ignoredVersion() -> VersionInfo
+
+      :returns: The ignored version of this mod (for update), or an invalid version if the user
+
+      did not ignore version for this mod.
+
+
+
+   .. py:method:: installationFile() -> str
+
+      :returns: The absolute path to the file that was used to install this mod.
+
+
+
+   .. py:method:: isBackup() -> bool
+
+      :returns: True if this mod represents a backup.
+
+
+
+   .. py:method:: isForeign() -> bool
+
+      :returns: True if this mod represents a foreign mod, not managed by MO2.
+
+
+
+   .. py:method:: isOverwrite() -> bool
+
+      :returns: True if this mod represents the overwrite mod.
+
+
+
+   .. py:method:: isSeparator() -> bool
+
+      :returns: True if this mod represents a separator.
+
+
+
+   .. py:method:: name() -> str
+
+      :returns: The name of this mod.
+
+
+
+   .. py:method:: newestVersion() -> VersionInfo
+
+      :returns: The newest version of this mod (as known by MO2). If this matches version(),
+
+      then the mod is up-to-date.
+
+
+
+   .. py:method:: nexusId() -> int
+
+      :returns: The Nexus ID of this mod.
+
+
+
+   .. py:method:: notes() -> str
+
+      :returns: The notes for this mod, if any.
+
+
+
+   .. py:method:: pluginSetting(plugin_name: str, key: str, default: MoVariant = None) -> MoVariant
+
+      Retrieve the specified setting in this mod for a plugin.
+
+      :param plugin_name: Name of the plugin for which to retrieve a setting. This should always be `IPlugin.name()`
+                          unless you have a really good reason to access settings of another plugin.
+      :param key: Identifier of the setting.
+      :param default: The default value to return if the setting does not exist.
+
+      :returns: The setting, if found, or the default value.
+
+
+
+   .. py:method:: pluginSettings(plugin_name: str) -> dict[str, MoVariant]
+
+      Retrieve the settings in this mod for a plugin.
+
+      :param plugin_name: Name of the plugin for which to retrieve settings. This should always be `IPlugin.name()`
+                          unless you have a really good reason to access settings of another plugin.
+
+      :returns: A map from setting key to value. The map is empty if there are not settings for this mod.
+
+
+
+   .. py:method:: primaryCategory() -> int
+
+      :returns: The ID of the primary category of this mod.
+
+
+
+   .. py:method:: removeCategory(name: str) -> bool
+
+      Unassign a category from this mod.
+
+      :param name: Name of the category to remove.
+
+      :returns: True if the category was removed, False otherwise (e.g. if no such category
+
+      was assigned).
+
+
+
+   .. py:method:: repository() -> str
+
+      :returns: The name of the repository from which this mod was installed.
+
+
+
+   .. py:method:: setGameName(name: str) -> None
+
+      Set the source game of this mod.
+
+      :param name: The new source game short name of this mod.
+
+
+
+   .. py:method:: setIsEndorsed(endorsed: bool) -> None
+
+      Set endorsement state of the mod.
+
+      :param endorsed: New endorsement state of this mod.
+
+
+
+   .. py:method:: setNewestVersion(version: VersionInfo) -> None
+
+      Set the latest known version of this mod.
+
+      :param version: The latest known version of this mod.
+
+
+
+   .. py:method:: setNexusID(nexus_id: int) -> None
+
+      Set the Nexus ID of this mod.
+
+      :param nexus_id: Thew new Nexus ID of this mod.
+
+
+
+   .. py:method:: setPluginSetting(plugin_name: str, key: str, value: MoVariant) -> bool
+
+      Set the specified setting in this mod for a plugin.
+
+      :param plugin_name: Name of the plugin for which to retrieve a setting. This should always be `IPlugin.name()`
+                          unless you have a really good reason to access settings of another plugin.
+      :param key: Identifier of the setting.
+      :param value: New value for the setting to set.
+
+      :returns: True if the setting was set correctly, False otherwise.
+
+
+
+   .. py:method:: setUrl(url: str) -> None
+
+      Set the URL of this mod.
+
+      :param url: The URL of this mod.
+
+
+
+   .. py:method:: setVersion(version: VersionInfo) -> None
+
+      Set the version of this mod.
+
+      :param version: The new version of this mod.
+
+
+
+   .. py:method:: trackedState() -> TrackedState
+
+      :returns: The tracked state of this mod.
+
+
+
+   .. py:method:: url() -> str
+
+      :returns: The URL of this mod, or an empty QString() if no URL is associated
+
+      with this mod.
+
+
+
+   .. py:method:: validated() -> bool
+
+      Check if the mod was marked as validated by the user.
+
+      MO2 uses ModDataChecker to check the content of mods, but sometimes these fail, in
+      which case mods are incorrectly marked as 'not containing valid games data'. Users can
+      choose to mark these mods as valid to hide the warning / flag.
+
+      :returns: True if th is mod was marked as containing valid game data.
+
+
+
+   .. py:method:: version() -> VersionInfo
+
+      :returns: The current version of this mod.
+
+
+
+.. py:class:: IProfile
+
+   Interface to interact with Mod Organizer 2 profiles.
+
+
+   .. py:method:: absoluteIniFilePath(inifile: str) -> str
+
+      Retrieve the absolute file path to the corresponding INI file for this profile.
+
+      If iniFile does not correspond to a file in the list of INI files for the
+      current game (as returned by IPluginGame::iniFiles), the path to the global
+      file will be returned (if iniFile is absolute, iniFile is returned, otherwise
+      the path is assumed relative to the game documents directory).
+
+      :param inifile: INI file to retrieve a path for. This can either be the name of a file or a path to the
+                      absolute file outside of the profile.
+
+      :returns: The absolute path for the given INI file for this profile.
+
+
+
+   .. py:method:: absolutePath() -> str
+
+      :returns: The absolute path to the profile folder.
+
+
+
+   .. py:method:: invalidationActive() -> tuple[bool, bool]
+
+      :returns: True if automatic archive invalidation is enabled for this profile, False otherwise.
+
+
+
+   .. py:method:: localSavesEnabled() -> bool
+
+      :returns: True if profile-specific saves are enabled for this profile, False otherwise.
+
+
+
+   .. py:method:: localSettingsEnabled() -> bool
+
+      :returns: True if profile-specific game settings are enabled for this profile, False otherwise.
+
+
+
+   .. py:method:: name() -> str
+
+      :returns: The name of this profile.
+
+
+
+.. py:class:: IDownloadManager
+
+   .. py:method:: downloadPath(id: int) -> str
+
+      Retrieve the (absolute) path of the specified download.
+
+      :param id: ID of the download.
+
+      :returns: The absolute path to the file corresponding to the given download. This file
+
+      may not exist yet if the download is incomplete.
+
+
+
+   .. py:method:: onDownloadComplete(callback: Callable[[int], None]) -> bool
+
+      Installs a handler to be called when a download completes.
+
+      :param callback: The function to be called when a download complete. The parameter is the download ID.
+
+      :returns: True if the handler was installed properly (there are currently no reasons for this to fail).
+
+
+
+   .. py:method:: onDownloadFailed(callback: Callable[[int], None]) -> bool
+
+      Installs a handler to be called when a download fails.
+
+      :param callback: The function to be called when a download fails. The parameter is the download ID.
+
+      :returns: True if the handler was installed properly (there are currently no reasons for this to fail).
+
+
+
+   .. py:method:: onDownloadPaused(callback: Callable[[int], None]) -> bool
+
+      Installs a handler to be called when a download is paused.
+
+      :param callback: The function to be called when a download is paused. The parameter is the download ID.
+
+      :returns: True if the handler was installed properly (there are currently no reasons for this to fail).
+
+
+
+   .. py:method:: onDownloadRemoved(callback: Callable[[int], None]) -> bool
+
+      Installs a handler to be called when a download is removed.
+
+      :param callback: The function to be called when a download is removed. The parameter is the download ID.
+
+      :returns: True if the handler was installed properly (there are currently no reasons for this to fail).
+
+
+
+   .. py:method:: startDownloadNexusFile(mod_id: int, file_id: int) -> int
+
+      Download a file from www.nexusmods.com/<game>. <game> is always the game
+      currently being managed.
+
+      :param mod_id: ID of the mod to download the file from.
+      :param file_id: ID of the file to download.
+
+      :returns: An ID identifying the download.
+
+
+
+   .. py:method:: startDownloadURLs(urls: Sequence[str]) -> int
+
+      Download a file by url.
+
+      The list can contain alternative URLs to allow the download manager to switch
+      in case of download problems
+
+      :param urls: List of urls to download from.
+
+      :returns: An ID identifying the download.
+
+
+
+.. py:class:: IInstallationManager
+
+   .. py:method:: createFile(entry: FileTreeEntry) -> str
+
+      Create a new file on the disk corresponding to the given entry.
+
+      This method can be used by installer that needs to create files that are not in the original
+      archive. At the end of the installation, if there are entries in the final tree that were used
+      to create files, the corresponding files will be moved to the mod folder.
+
+      Temporary files corresponding to created files are automatically cleaned up at the end of
+      the installation.
+
+      :param entry: The entry for which a temporary file should be created.
+
+      :returns: The path to the created file, or an empty string if the file could not be created.
+
+
+
+   .. py:method:: extractFile(entry: FileTreeEntry, silent: bool = False) -> str
+
+      Extract the specified file from the currently opened archive to a temporary
+      location.
+
+      This method cannot be used to extract directory.
+
+      The call will fail with an exception if no archive is open (plugins deriving from
+      IPluginInstallerSimple can rely on that, custom installers should not). The temporary
+      file is automatically cleaned up after the installation. This call can be very slow
+      if the archive is large and "solid".
+
+      :param entry: Entry corresponding to the file to extract.
+      :param silent: If true, the dialog showing extraction progress will not be shown.
+
+      :returns: The absolute path to the temporary file, or an empty string if the file was not extracted.
+
+
+
+   .. py:method:: extractFiles(entries: list[FileTreeEntry], silent: bool = False) -> Sequence[str]
+
+      Extract the specified files from the currently opened archive to a temporary
+      location.
+
+      This method cannot be used to extract directories.
+
+      The call will fail with an exception if no archive is open (plugins deriving from
+      IPluginInstallerSimple can rely on that, custom installers should not). The temporary
+      files are automatically cleaned up after the installation. This call can be very slow
+      if the archive is large and "solid".
+
+      :param entries: Entries corresponding to the files to extract.
+      :param silent: If true, the dialog showing extraction progress will not be shown.
+
+      :returns: A list containing absolute paths to the temporary files.
+
+
+
+   .. py:method:: getSupportedExtensions() -> Sequence[str]
+
+      :returns: The extensions of archives supported by this installation manager.
+
+
+
+   .. py:method:: installArchive(mod_name: GuessedString, archive: Union[str, os.PathLike[str], PyQt6.QtCore.QFileInfo], mod_id: int = 0) -> tuple[InstallResult, str, int]
+
+      Install the given archive.
+
+      :param mod_name: Suggested name of the mod.
+      :param archive: Path to the archive to install.
+      :param mod_id: ID of the mod, if available.
+
+      :returns: The result of the installation.

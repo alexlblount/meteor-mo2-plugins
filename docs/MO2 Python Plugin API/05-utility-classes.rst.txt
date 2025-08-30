@@ -1,0 +1,775 @@
+=========================
+Utility Classes and Functions
+=========================
+
+This section documents the utility classes, enumerations, functions, and constants that support MO2 plugin development but are not part of the core interfaces.
+
+Enumerations
+------------
+
+EndorsedState
+~~~~~~~~~~~~~
+
+.. py:class:: EndorsedState(*args, **kwds)
+
+   Bases: :py:obj:`enum.Enum`
+
+   Enumeration representing the endorsement state of a mod.
+
+   .. py:attribute:: ENDORSED_FALSE
+      :value: Ellipsis
+
+   .. py:attribute:: ENDORSED_NEVER
+      :value: Ellipsis
+
+   .. py:attribute:: ENDORSED_TRUE
+      :value: Ellipsis
+
+GuessQuality
+~~~~~~~~~~~~
+
+.. py:class:: GuessQuality(*args, **kwds)
+
+   Bases: :py:obj:`enum.Enum`
+
+   Describes how good the code considers a guess (i.e. for a mod name) this is used to
+   determine if a name from another source should overwrite or not.
+
+   .. py:attribute:: FALLBACK
+      :value: Ellipsis
+
+   .. py:attribute:: GOOD
+      :value: Ellipsis
+
+   .. py:attribute:: META
+      :value: Ellipsis
+
+   .. py:attribute:: PRESET
+      :value: Ellipsis
+
+   .. py:attribute:: USER
+      :value: Ellipsis
+
+InstallResult
+~~~~~~~~~~~~~
+
+.. py:class:: InstallResult(*args, **kwds)
+
+   Bases: :py:obj:`enum.Enum`
+
+   Enumeration representing the result of a mod installation operation.
+
+   .. py:attribute:: FAILED
+      :value: Ellipsis
+
+   .. py:attribute:: MANUAL_REQUESTED
+      :value: Ellipsis
+
+   .. py:attribute:: NOT_ATTEMPTED
+      :value: Ellipsis
+
+   .. py:attribute:: SUCCESS
+      :value: Ellipsis
+
+LoadOrderMechanism
+~~~~~~~~~~~~~~~~~~
+
+.. py:class:: LoadOrderMechanism(*args, **kwds)
+
+   Bases: :py:obj:`enum.Enum`
+
+   Enumeration describing how the game handles plugin load ordering.
+
+   .. py:attribute:: DATE
+      :value: Ellipsis
+
+   .. py:attribute:: FILE_TIME
+      :value: Ellipsis
+
+   .. py:attribute:: NONE
+      :value: Ellipsis
+
+   .. py:attribute:: PLUGINS_TXT
+      :value: Ellipsis
+
+ModState
+~~~~~~~~
+
+.. py:class:: ModState(*args, **kwds)
+
+   Bases: :py:obj:`enum.Enum`
+
+   Enumeration representing the state of a mod (active, inactive, etc.).
+   This enum supports bitwise operations for combining states.
+
+   .. py:method:: __and__(other: ModState) -> ModState
+   .. py:method:: __or__(other: ModState) -> ModState
+   .. py:method:: __xor__(other: ModState) -> ModState
+   .. py:method:: __invert__() -> ModState
+
+   .. py:attribute:: ACTIVE
+      :value: Ellipsis
+
+   .. py:attribute:: ENDORSED
+      :value: Ellipsis
+
+   .. py:attribute:: ESSENTIAL
+      :value: Ellipsis
+
+   .. py:attribute:: EXISTS
+      :value: Ellipsis
+
+   .. py:attribute:: INVALID
+      :value: Ellipsis
+
+   .. py:attribute:: OVERWRITE
+      :value: Ellipsis
+
+   .. py:attribute:: VALID
+      :value: Ellipsis
+
+PluginState
+~~~~~~~~~~~
+
+.. py:class:: PluginState(*args, **kwds)
+
+   Bases: :py:obj:`enum.Enum`
+
+   Enumeration representing the state of a game plugin.
+   This enum supports bitwise operations for combining states.
+
+   .. py:method:: __and__(other: PluginState) -> PluginState
+   .. py:method:: __or__(other: PluginState) -> PluginState
+   .. py:method:: __xor__(other: PluginState) -> PluginState
+   .. py:method:: __invert__() -> PluginState
+
+   .. py:attribute:: ACTIVE
+      :value: Ellipsis
+
+   .. py:attribute:: INACTIVE
+      :value: Ellipsis
+
+ProfileSetting
+~~~~~~~~~~~~~~
+
+.. py:class:: ProfileSetting(*args, **kwds)
+
+   Bases: :py:obj:`enum.Enum`
+
+   Enumeration for profile-specific settings.
+
+   .. py:attribute:: AUTO_DISCOVERY
+      :value: Ellipsis
+
+   .. py:attribute:: MODS
+      :value: Ellipsis
+
+   .. py:attribute:: PLUGINS
+      :value: Ellipsis
+
+   .. py:attribute:: SAVE_GAMES
+      :value: Ellipsis
+
+ReleaseType
+~~~~~~~~~~~
+
+.. py:class:: ReleaseType(*args, **kwds)
+
+   Bases: :py:obj:`enum.Enum`
+
+   Enumeration representing the type of software release.
+
+   .. py:attribute:: ALPHA
+      :value: Ellipsis
+
+   .. py:attribute:: BETA
+      :value: Ellipsis
+
+   .. py:attribute:: CANDIDATE
+      :value: Ellipsis
+
+   .. py:attribute:: FINAL
+      :value: Ellipsis
+
+   .. py:attribute:: PREALPHA
+      :value: Ellipsis
+
+SortMechanism
+~~~~~~~~~~~~~
+
+.. py:class:: SortMechanism(*args, **kwds)
+
+   Bases: :py:obj:`enum.Enum`
+
+   Enumeration describing how plugins are sorted.
+
+   .. py:attribute:: LOOT
+      :value: Ellipsis
+
+   .. py:attribute:: NONE
+      :value: Ellipsis
+
+TrackedState
+~~~~~~~~~~~~
+
+.. py:class:: TrackedState(*args, **kwds)
+
+   Bases: :py:obj:`enum.Enum`
+
+   Enumeration representing the tracking state of a mod.
+
+   .. py:attribute:: TRACKED_FALSE
+      :value: Ellipsis
+
+   .. py:attribute:: TRACKED_TRUE
+      :value: Ellipsis
+
+VersionScheme
+~~~~~~~~~~~~~
+
+.. py:class:: VersionScheme(*args, **kwds)
+
+   Bases: :py:obj:`enum.Enum`
+
+   Enumeration describing different version numbering schemes.
+
+   .. py:attribute:: DECIMAL_MARK
+      :value: Ellipsis
+
+   .. py:attribute:: DISCOVER
+      :value: Ellipsis
+
+   .. py:attribute:: NUMBERS_AND_LETTERS
+      :value: Ellipsis
+
+   .. py:attribute:: REGULAR
+      :value: Ellipsis
+
+Data Classes
+------------
+
+ExecutableForcedLoadSetting
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. py:class:: ExecutableForcedLoadSetting(process: str, library: str)
+
+   Configuration for forcing the loading of a library with an executable.
+
+   .. py:method:: enabled() -> bool
+      
+      :returns: True if this forced load setting is enabled.
+
+   .. py:method:: forced() -> bool
+      
+      :returns: True if this library should be force-loaded.
+
+   .. py:method:: library() -> str
+      
+      :returns: The path to the library to be loaded.
+
+   .. py:method:: process() -> str
+      
+      :returns: The name of the process this setting applies to.
+
+   .. py:method:: withEnabled(enabled: bool) -> ExecutableForcedLoadSetting
+      
+      :param enabled: Whether this setting should be enabled.
+      :returns: A new ExecutableForcedLoadSetting with the updated enabled state.
+
+   .. py:method:: withForced(forced: bool) -> ExecutableForcedLoadSetting
+      
+      :param forced: Whether the library should be force-loaded.
+      :returns: A new ExecutableForcedLoadSetting with the updated forced state.
+
+ExecutableInfo
+~~~~~~~~~~~~~~
+
+.. py:class:: ExecutableInfo(title: str, binary: Union[str, os.PathLike[str], PyQt6.QtCore.QFileInfo])
+
+   Information about an executable that can be launched through MO2.
+
+   .. py:method:: arguments() -> Sequence[str]
+      
+      :returns: The command line arguments for this executable.
+
+   .. py:method:: asCustom() -> ExecutableInfo
+      
+      :returns: A copy of this ExecutableInfo marked as custom.
+
+   .. py:method:: binary() -> PyQt6.QtCore.QFileInfo
+      
+      :returns: Information about the executable binary file.
+
+   .. py:method:: isCustom() -> bool
+      
+      :returns: True if this is a custom executable (user-defined).
+
+   .. py:method:: steamAppID() -> str
+      
+      :returns: The Steam application ID, if this executable is launched through Steam.
+
+   .. py:method:: title() -> str
+      
+      :returns: The display title for this executable.
+
+   .. py:method:: withArgument(argument: str) -> ExecutableInfo
+      
+      :param argument: An additional command line argument.
+      :returns: A new ExecutableInfo with the added argument.
+
+   .. py:method:: withSteamAppId(app_id: str) -> ExecutableInfo
+      
+      :param app_id: The Steam application ID.
+      :returns: A new ExecutableInfo with the Steam app ID set.
+
+   .. py:method:: withWorkingDirectory(directory: Union[str, os.PathLike[str], PyQt6.QtCore.QDir]) -> ExecutableInfo
+      
+      :param directory: The working directory for the executable.
+      :returns: A new ExecutableInfo with the working directory set.
+
+   .. py:method:: workingDirectory() -> PyQt6.QtCore.QDir
+      
+      :returns: The working directory for this executable.
+
+Mapping
+~~~~~~~
+
+.. py:class:: Mapping(source: str, destination: str, is_directory: bool, create_target: bool = False)
+
+   Represents a file system mapping used by MO2's Virtual File System.
+
+   .. py:method:: __str__() -> str
+      
+      Return str(self).
+
+   .. py:property:: createTarget
+      :type: bool
+      
+      Whether the target should be created if it doesn't exist.
+
+   .. py:property:: destination
+      :type: str
+      
+      The destination path in the mapping.
+
+   .. py:property:: isDirectory
+      :type: bool
+      
+      Whether this mapping represents a directory.
+
+   .. py:property:: source
+      :type: str
+      
+      The source path in the mapping.
+
+ModRepositoryFileInfo
+~~~~~~~~~~~~~~~~~~~~~
+
+.. py:class:: ModRepositoryFileInfo
+
+   Information about a mod file from a repository (e.g., Nexus).
+
+   .. py:property:: categoryID
+      :type: int
+
+   .. py:property:: description
+      :type: str
+
+   .. py:property:: fileID
+      :type: int
+
+   .. py:property:: fileName
+      :type: str
+
+   .. py:property:: fileSize
+      :type: int
+
+   .. py:property:: fileTime
+      :type: PyQt6.QtCore.QDateTime
+
+   .. py:property:: gameName
+      :type: str
+
+   .. py:property:: modID
+      :type: int
+
+   .. py:property:: modName
+      :type: str
+
+   .. py:property:: newestVersion
+      :type: VersionInfo
+
+   .. py:property:: repository
+      :type: str
+
+   .. py:property:: userData
+      :type: MoVariant
+
+   .. py:property:: version
+      :type: VersionInfo
+
+PluginSetting
+~~~~~~~~~~~~~
+
+.. py:class:: PluginSetting(key: str, description: str, default_value: MoVariant)
+
+   Class to hold the user-configurable parameters a plugin accepts. The purpose of this class is
+   only to inform the application what settings to offer to the user, it does not hold the actual value.
+
+   .. py:property:: default_value
+      :type: MoVariant
+      
+      The default value for this setting.
+
+   .. py:property:: description
+      :type: str
+      
+      A description of what this setting does.
+
+   .. py:property:: key
+      :type: str
+      
+      The unique key identifying this setting.
+
+Utility Classes
+---------------
+
+GuessedString
+~~~~~~~~~~~~~
+
+.. py:class:: GuessedString(value: str, quality: GuessQuality = GuessQuality.USER)
+
+   Represents a string that may be set from different places. Each time the value is
+   changed a "quality" is specified to say how probable it is the value is the best choice.
+   Only the best choice should be used in the end but alternatives can be queried. This
+   class also allows a filter to be set. If a "guess" doesn't pass the filter, it is ignored.
+
+   .. py:method:: __str__() -> str
+      
+      :returns: The current best guess for the string value.
+
+   .. py:method:: reset() -> GuessedString
+                  reset(value: str, quality: GuessQuality) -> GuessedString
+                  reset(other: GuessedString) -> GuessedString
+
+      Reset this GuessedString object by copying the given one, only
+      if the given one has better quality.
+
+      :param other: The GuessedString to copy.
+      :returns: This GuessedString object.
+
+   .. py:method:: setFilter(filter: Callable[[str], Union[str, bool]]) -> None
+
+      Set the filter for this GuessedString.
+
+      The filter is applied on every `update()` and can reject the new value
+      altogether or modify it (by returning a new value).
+
+      :param filter: The new filter.
+
+   .. py:method:: update(value: str) -> GuessedString
+                  update(value: str, quality: GuessQuality) -> GuessedString
+
+      Update this GuessedString by adding a new variants with the given quality.
+
+      If the specified quality is better than the current one, the actual value of
+      the GuessedString is also updated.
+
+      The GuessedString is only updated if the given value passes the filter.
+
+      :param value: The new variant to add.
+      :param quality: The quality of the variant.
+      :returns: This GuessedString object.
+
+   .. py:method:: variants() -> set[str]
+
+      :returns: The list of variants for this GuessedString.
+
+VersionInfo
+~~~~~~~~~~~
+
+.. py:class:: VersionInfo(value: str, scheme: VersionScheme = VersionScheme.DISCOVER)
+              VersionInfo(major: int, minor: int, subminor: int, subsubminor: int, release_type: ReleaseType = ReleaseType.FINAL)
+              VersionInfo(major: int, minor: int, subminor: int, release_type: ReleaseType = ReleaseType.FINAL)
+
+   Represents the version of a mod or plugin.
+
+   .. py:method:: __eq__(other: object) -> bool
+      
+      Return self==value.
+
+   .. py:method:: __ge__(arg0: VersionInfo) -> bool
+      
+      Return self>=value.
+
+   .. py:method:: __gt__(arg0: VersionInfo) -> bool
+      
+      Return self>value.
+
+   .. py:method:: __le__(arg0: VersionInfo) -> bool
+      
+      Return self<=value.
+
+   .. py:method:: __lt__(arg0: VersionInfo) -> bool
+      
+      Return self<value.
+
+   .. py:method:: __ne__(other: object) -> bool
+      
+      Return self!=value.
+
+   .. py:method:: __str__() -> str
+      
+      Return str(self).
+
+   .. py:method:: clear() -> None
+      
+      Clear this version info (make it invalid).
+
+   .. py:method:: displayString(forced_segments: int = 2) -> str
+      
+      :param forced_segments: Minimum number of version segments to display.
+      :returns: A formatted string representation of this version.
+
+   .. py:method:: isValid() -> bool
+      
+      :returns: True if this VersionInfo represents a valid version.
+
+   .. py:method:: parse(version_string: str, scheme: VersionScheme, fuzzy: bool = False) -> VersionInfo
+      :staticmethod:
+      
+      Parse a version string according to the given scheme.
+      
+      :param version_string: The version string to parse.
+      :param scheme: The versioning scheme to use for parsing.
+      :param fuzzy: Whether to use fuzzy parsing (more tolerant).
+      :returns: A VersionInfo object representing the parsed version.
+
+   .. py:method:: scheme() -> VersionScheme
+      
+      :returns: The version scheme used by this VersionInfo.
+
+Game Feature Classes
+--------------------
+
+ModDataChecker
+~~~~~~~~~~~~~~
+
+.. py:class:: ModDataChecker
+
+   Bases: :py:obj:`GameFeature`
+
+   Game feature that is used to check the content of a data tree.
+
+   .. py:class:: CheckReturn(*args, **kwds)
+
+      Bases: :py:obj:`enum.Enum`
+
+      Enumeration returned by data checker methods.
+
+      .. py:attribute:: FIXABLE
+         :type:  ModDataChecker.CheckReturn
+         :value: Ellipsis
+
+      .. py:attribute:: INVALID
+         :type:  ModDataChecker.CheckReturn
+         :value: Ellipsis
+
+      .. py:attribute:: VALID
+         :type:  ModDataChecker.CheckReturn
+         :value: Ellipsis
+
+   .. py:method:: dataLooksValid(filetree: IFileTree) -> ModDataChecker.CheckReturn
+      :abstractmethod:
+
+      Check that the given filetree represent a valid mod layout, or can be easily
+      fixed.
+
+      :param filetree: The file tree to check.
+      :returns: CheckReturn indicating if the data is valid, invalid, or fixable.
+
+   .. py:method:: fix(filetree: IFileTree) -> IFileTree
+      :abstractmethod:
+
+      Fix problems with the given filetree.
+
+      :param filetree: The file tree to fix.
+      :returns: The fixed file tree.
+
+ModDataContent
+~~~~~~~~~~~~~~
+
+.. py:class:: ModDataContent
+
+   Bases: :py:obj:`GameFeature`
+
+   The ModDataContent feature is used (when available) to indicate to users the content
+   of mods in the "Content" column.
+
+   The feature exposes a list of possible content types, each associated with an ID, a name
+   and an icon. The icon is the path to either:
+
+   - A Qt resource path (:/path/to/icon.png)
+   - An absolute file path to an icon
+
+   .. py:method:: getAllContents() -> list[ModDataContent.Content]
+      :abstractmethod:
+
+      :returns: The list of all possible contents for the corresponding game.
+
+   .. py:method:: getContentsFor(filetree: IFileTree) -> list[ModDataContent.Content]
+      :abstractmethod:
+
+      :param filetree: The tree corresponding to the mod to get contents for.
+      :returns: The contents in the given tree.
+
+LocalSavegames
+~~~~~~~~~~~~~~
+
+.. py:class:: LocalSavegames
+
+   Bases: :py:obj:`GameFeature`
+
+   Base class for all game features, cannot be inherited, used only for typing
+   purpose in Python.
+
+   .. py:method:: mappings(profile_save_dir: PyQt6.QtCore.QDir) -> list[Mapping]
+      :abstractmethod:
+
+      :param profile_save_dir: The directory where profile save games are stored.
+      :returns: List of mappings for local save games.
+
+   .. py:method:: prepareProfile(profile: IProfile) -> bool
+      :abstractmethod:
+
+      Prepare the profile for local save games.
+
+      :param profile: The profile to prepare.
+      :returns: True if preparation was successful.
+
+SaveGameInfo
+~~~~~~~~~~~~
+
+.. py:class:: SaveGameInfo
+
+   Bases: :py:obj:`GameFeature`
+
+   Feature to get hold of stuff to do with save games.
+
+   .. py:method:: getSaveGameWidget(parent: PyQt6.QtWidgets.QWidget) -> ISaveGameInfoWidget | None
+      :abstractmethod:
+
+      Retrieve a widget to display over the save game list.
+
+      :param parent: The parent widget.
+      :returns: A SaveGameInfoWidget to display information about save game.
+
+UnmanagedMods
+~~~~~~~~~~~~~
+
+.. py:class:: UnmanagedMods
+
+   Bases: :py:obj:`GameFeature`
+
+   Base class for all game features, cannot be inherited, used only for typing
+   purpose in Python.
+
+   .. py:method:: displayName(mod_name: str) -> str
+      :abstractmethod:
+
+      Get the display name for an unmanaged mod.
+
+      :param mod_name: The internal mod name.
+      :returns: The display name for the mod.
+
+   .. py:method:: mods(include_all: bool) -> list[str]
+      :abstractmethod:
+
+      Get the list of unmanaged mods.
+
+      :param include_all: Whether to include all mods or just active ones.
+      :returns: List of unmanaged mod names.
+
+   .. py:method:: referenceFile(mod_name: str) -> PyQt6.QtCore.QFileInfo
+      :abstractmethod:
+
+      Get a reference file for the given unmanaged mod.
+
+      :param mod_name: The mod name.
+      :returns: A QFileInfo object representing the reference file.
+
+   .. py:method:: secondaryFiles(mod_name: str) -> list[str]
+      :abstractmethod:
+
+      Get the list of secondary files for the given unmanaged mod.
+
+      :param mod_name: The mod name.
+      :returns: List of secondary file paths.
+
+Functions
+---------
+
+getFileVersion
+~~~~~~~~~~~~~~
+
+.. py:function:: getFileVersion(filepath: Union[str, os.PathLike[str], PyQt6.QtCore.QFileInfo]) -> str
+
+   Retrieve the file version of the given executable.
+
+   :param filepath: Absolute path to the executable.
+   :returns: The file version, or an empty string if the file version could not be retrieved.
+
+getIconForExecutable
+~~~~~~~~~~~~~~~~~~~~
+
+.. py:function:: getIconForExecutable(executable: Union[str, os.PathLike[str], PyQt6.QtCore.QFileInfo]) -> PyQt6.QtGui.QIcon
+
+   Retrieve the icon of an executable. Currently this always extracts the biggest icon.
+
+   :param executable: Absolute path to the executable.
+   :returns: The icon for this executable, if any.
+
+getProductVersion
+~~~~~~~~~~~~~~~~~
+
+.. py:function:: getProductVersion(executable: Union[str, os.PathLike[str], PyQt6.QtCore.QFileInfo]) -> str
+
+   Retrieve the product version of the given executable.
+
+   :param executable: Absolute path to the executable.
+   :returns: The product version, or an empty string if the product version could not be retrieved.
+
+Constants and Attributes
+------------------------
+
+GameFeatureType
+~~~~~~~~~~~~~~~
+
+.. py:data:: GameFeatureType
+
+   Type alias for game feature classes. Used for type hints and feature registration.
+
+INVALID_HANDLE_VALUE
+~~~~~~~~~~~~~~~~~~~~
+
+.. py:data:: INVALID_HANDLE_VALUE
+   :type:  int
+   :value: Ellipsis
+
+   Constant representing an invalid handle value in Windows API operations.
+
+MoVariant
+~~~~~~~~~
+
+.. py:data:: MoVariant
+
+   Type alias for values that can be stored in MO2's variant system. Supports common
+   Python types like str, int, bool, float, and sequences/mappings of these types.
+
+__version__
+~~~~~~~~~~~
+
+.. py:data:: __version__
+   :value: '2.5.2'
+
+   The version of the MO2 Python API.

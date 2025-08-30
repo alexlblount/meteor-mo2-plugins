@@ -1,0 +1,949 @@
+Plugin Interfaces
+=================
+
+This document contains all the plugin interface classes available in the MO2 Python API.
+
+.. py:class:: IPlugin
+
+   Bases: :py:obj:`abc.ABC`
+
+   Base class for all plugins.
+
+   .. py:method:: author() -> str
+      :abstractmethod:
+
+      :returns: The name of the plugin author.
+
+   .. py:method:: description() -> str
+      :abstractmethod:
+
+      :returns: The description for this plugin.
+
+   .. py:method:: enabledByDefault() -> bool
+
+      Check whether this plugin should be enabled by default.
+
+      :returns: True if this plugin should be enabled by default, False otherwise.
+
+   .. py:method:: init(organizer: IOrganizer) -> bool
+      :abstractmethod:
+
+      Initialize this plugin.
+
+      Note that this function may never be called if no `IOrganizer` is available
+      at that time, such as when creating the first instance in MO.
+
+      Plugins will probably want to store the organizer pointer. It is guaranteed
+      to be valid as long as the plugin is loaded.
+
+      These functions may be called before `init()`:
+
+        - `name()`
+        - see `IPluginGame` for more.
+
+      :param organizer: The main organizer interface.
+
+      :returns: True if the plugin was initialized correctly, False otherwise.
+
+   .. py:method:: localizedName() -> str
+
+      Retrieve the localized name of the plugin.
+
+      Unlike `name()`, this method can (and should!) return a localized name for the plugin.
+      This method returns name() by default.
+
+      :returns: The localized name of the plugin.
+
+   .. py:method:: master() -> str
+
+      Retrieve the master plugin of this plugin.
+
+      It is often easier to implement a functionality as multiple plugins in MO2, but ship the
+      plugins together, e.g. as a Python module or using `createFunctions()`. In this case, having
+      a master plugin (one of the plugin, or a separate one) tells MO2 that these plugins are
+      linked and should also be displayed together in the UI. If MO2 ever implements automatic
+      updates for plugins, the `master()` plugin will also be used for this purpose.
+
+      :returns: The master plugin of this plugin, or a null pointer if this plugin does not have a master.
+
+   .. py:method:: name() -> str
+      :abstractmethod:
+
+      Retrieve the name of the plugin.
+
+      The name of the plugin is used for internal storage purpose so it should not change,
+      and it should be static. In particular, you should not use a localized string (`tr()`)
+      for the plugin name.
+
+      In the future, we will provide a way to localized plugin names using a distinct method,
+      such as `localizedName()`.
+
+      :returns: The name of the plugin.
+
+   .. py:method:: requirements() -> list[IPluginRequirement]
+
+      Retrieve the requirements for this plugin.
+
+      This method is called right after `init()` and the ownership the requirements is
+
+      :returns: The list of requirements for this plugin.
+
+   .. py:method:: settings() -> Sequence[PluginSetting]
+      :abstractmethod:
+
+      :returns: A list of settings for this plugin.
+
+   .. py:method:: version() -> VersionInfo
+      :abstractmethod:
+
+      :returns: The version of this plugin.
+
+.. py:class:: IPluginDiagnose
+
+   Bases: :py:obj:`IPlugin`
+
+   Plugins that create problem reports to be displayed in the UI.
+
+   This can be used to report problems related to the same plugin (which implements further
+   interfaces) or as a stand-alone diagnosis tool.
+
+   .. py:method:: _invalidate() -> None
+
+      Invalidate the problems corresponding to this plugin.
+
+   .. py:method:: activeProblems() -> list[int]
+      :abstractmethod:
+
+      Retrieve the list of active problems found by this plugin.
+
+      This method returns a list of problem IDs, that are then used when calling other methods
+      such as `shortDescription()` or `hasGuidedFix()`.
+
+      :returns: The list of active problems for this plugin.
+
+   .. py:method:: fullDescription(key: int) -> str
+      :abstractmethod:
+
+      Retrieve the full description of the problem corresponding to the given key.
+
+      :param key: ID of the problem.
+
+      :returns: The full description of the problem.
+
+      :raises IndexError: If the key is not valid.
+
+   .. py:method:: hasGuidedFix(key: int) -> bool
+      :abstractmethod:
+
+      Check if the problem corresponding to the given key has a guided fix.
+
+      :param key: ID of the problem.
+
+      :returns: True if there is a guided fix for the problem, False otherwise.
+
+      :raises IndexError: If the key is not valid.
+
+   .. py:method:: shortDescription(key: int) -> str
+      :abstractmethod:
+
+      Retrieve the short description of the problem corresponding to the given key.
+
+      :param key: ID of the problem.
+
+      :returns: The short description of the problem.
+
+      :raises IndexError: If the key is not valid.
+
+   .. py:method:: startGuidedFix(key: int) -> None
+      :abstractmethod:
+
+      Starts a guided fix for the problem corresponding to the given key.
+
+      This method should throw `ValueError` if there is no guided fix for the corresponding
+      problem.
+
+      :param key: ID of the problem.
+
+      :raises IndexError: If the key is not valid.
+      :raises ValueError: If there is no guided fix for this problem.
+
+.. py:class:: IPluginFileMapper
+
+   Bases: :py:obj:`IPlugin`
+
+   Plugins that adds virtual file links.
+
+   .. py:method:: mappings() -> list[Mapping]
+      :abstractmethod:
+
+      :returns: Mapping for the virtual file system (VFS).
+
+.. py:class:: IPluginGame
+
+   Bases: :py:obj:`IPlugin`
+
+   Base classes for game plugins.
+
+   Each game requires a specific game plugin. These plugins were initially designed for
+   Bethesda games, so a lot of methods and attributes are irrelevant for other games. If
+   you wish to write a plugin for a much simpler game, please consider the `basic_games`
+   plugin: https://github.com/ModOrganizer2/modorganizer-basic_games
+
+   .. py:method:: CCPlugins() -> Sequence[str]
+
+      :returns: The current list of active Creation Club plugins.
+
+   .. py:method:: DLCPlugins() -> Sequence[str]
+
+      :returns: The list of esp/esm files that are part of known DLCs.
+
+   .. py:method:: binaryName() -> str
+      :abstractmethod:
+
+      :returns: The name of the default executable to run (relative to the game folder).
+
+   .. py:method:: dataDirectory() -> PyQt6.QtCore.QDir
+      :abstractmethod:
+
+      :returns: The path to the directory containing data (absolute path).
+
+   .. py:method:: detectGame() -> None
+      :abstractmethod:
+
+      Detect the game.
+
+      This method is the first called for game plugins (before `init()`). The following
+      methods should work properly after the call to `detectGame()` (and before `init()`):
+
+        - gameName()
+        - isInstalled()
+        - gameIcon()
+        - gameDirectory()
+        - dataDirectory()
+        - gameVariants()
+        - looksValid()
+
+      See `IPlugin.init()` for more.
+
+   .. py:method:: displayGameName() -> str
+
+      :returns: The name of the game to user for display, default to gameName().
+
+   .. py:method:: documentsDirectory() -> PyQt6.QtCore.QDir
+      :abstractmethod:
+
+      :returns: The directory of the documents folder where configuration files and such for this game reside.
+
+   .. py:method:: enabledPlugins() -> Sequence[str]
+
+      :returns: A list of plugins enabled by the game but not in a strict load order.
+
+   .. py:method:: executableForcedLoads() -> Sequence[ExecutableForcedLoadSetting]
+      :abstractmethod:
+
+      :returns: A list of automatically discovered libraries that can be force loaded with executables.
+
+   .. py:method:: executables() -> Sequence[ExecutableInfo]
+
+      :returns: A list of automatically discovered executables of the game itself and tools surrounding it.
+
+   .. py:method:: gameDirectory() -> PyQt6.QtCore.QDir
+      :abstractmethod:
+
+      :returns: The directory containing the game installation.
+
+   .. py:method:: gameIcon() -> PyQt6.QtGui.QIcon
+      :abstractmethod:
+
+      :returns: The icon representing the game.
+
+   .. py:method:: gameName() -> str
+      :abstractmethod:
+
+      :returns: The name of the game (for internal usage).
+
+   .. py:method:: gameNexusName() -> str
+
+      :returns: The name of the game identifier for Nexus.
+
+   .. py:method:: gameShortName() -> str
+      :abstractmethod:
+
+      :returns: The short name of the game.
+
+   .. py:method:: gameVariants() -> Sequence[str]
+
+      Retrieve the list of variants for this game.
+
+      If there are multiple variants of a game (and the variants make a difference to the
+      plugin), like a regular one and a GOTY-edition, the plugin can return a list of them
+      and the user gets to chose which one he owns.
+
+      :returns: The list of variants of the game.
+
+   .. py:method:: gameVersion() -> str
+      :abstractmethod:
+
+      :returns: The version of the game.
+
+   .. py:method:: getLauncherName() -> str
+      :abstractmethod:
+
+      :returns: The name of the launcher executable to run (relative to the game folder), or an
+
+      empty string if there is no launcher.
+
+   .. py:method:: getSupportURL() -> str
+      :abstractmethod:
+
+      :returns: An URL for the support page of this game.
+
+   .. py:method:: iniFiles() -> Sequence[str]
+
+      :returns: The list of INI files this game uses. The first file in the list should be the
+
+      'main' INI file.
+
+   .. py:method:: initializeProfile(directory: PyQt6.QtCore.QDir, settings: ProfileSetting) -> None
+      :abstractmethod:
+
+      Initialize a profile for this game.
+
+      The MO app does not yet support virtualizing only specific aspects but plugins should be written
+      with this future functionality in mind.
+
+      This function will be used to initially create a profile, potentially to repair it or upgrade/downgrade
+      it so the implementations have to gracefully handle the case that the directory already contains files.
+
+      :param directory: The directory where the profile is to be initialized.
+      :param settings: The parameters for how the profile should be initialized.
+
+   .. py:method:: isInstalled() -> bool
+      :abstractmethod:
+
+      :returns: True if this game has been discovered as installed, False otherwise.
+
+   .. py:method:: listSaves(folder: PyQt6.QtCore.QDir) -> list[ISaveGame]
+      :abstractmethod:
+
+      List saves in the given directory.
+
+      :param folder: The folder to list saves from.
+
+      :returns: The list of game saves in the given folder.
+
+   .. py:method:: loadOrderMechanism() -> LoadOrderMechanism
+
+      :returns: The load order mechanism used by this game.
+
+   .. py:method:: looksValid(directory: PyQt6.QtCore.QDir) -> bool
+      :abstractmethod:
+
+      Check if the given directory looks like a valid game installation.
+
+      :param directory: Directory to check.
+
+      :returns: True if the directory looks like a valid installation of this game, False otherwise.
+
+   .. py:method:: lootGameName() -> str
+
+      :returns: The game name to use when calling LOOT from MO2, default to gameShortName().
+
+   .. py:method:: nexusGameID() -> int
+      :abstractmethod:
+
+      Retrieve the Nexus game ID for this game.
+
+      Example: For Skyrim, the Nexus game ID is 110.
+
+      :returns: The Nexus game ID for this game.
+
+   .. py:method:: nexusModOrganizerID() -> int
+
+      Retrieve the Nexus mod ID of Mod Organizer for this game.
+
+      Example: For Skyrim SE, the mod ID of MO2 is 6194. You can find the mod ID in the URL:
+        https://www.nexusmods.com/skyrimspecialedition/mods/6194
+
+      :returns: The Nexus mod ID of Mod Organizer for this game.
+
+   .. py:method:: primaryPlugins() -> Sequence[str]
+
+      :returns: The list of plugins that are part of the game and not considered optional.
+
+   .. py:method:: primarySources() -> Sequence[str]
+
+      Retrieve primary alternative 'short' names for this game.
+
+      This is used to determine if a Nexus (or other) download source should be considered
+      as a primary source for the game so that it is not flagged as an alternative one.
+
+      :returns: The list of primary alternative 'short' names for this game, or an empty list.
+
+   .. py:method:: savesDirectory() -> PyQt6.QtCore.QDir
+      :abstractmethod:
+
+      :returns: The directory where save games are stored.
+
+   .. py:method:: secondaryDataDirectories() -> Dict[str, PyQt6.QtCore.QDir]
+
+      Retrieve the list of secondary data directories. Each directories should be
+      assigned a unique name that differs from "data" which is the name of the main
+      data directory returned by dataDirectory().
+
+      :returns: A mapping from unique name to secondary data directories.
+
+   .. py:method:: setGamePath(path: str) -> None
+      :abstractmethod:
+
+      Set the path to the managed game.
+
+      This is called during instance creation if the game is not auto-detected and the user has
+      to specify the installation location. This is not called if the game has been auto-detected,
+      so `isInstalled()` should call this.
+
+      :param path: Path to the game installation.
+
+   .. py:method:: setGameVariant(variant: str) -> None
+      :abstractmethod:
+
+      Set the game variant.
+
+      If there are multiple variants of game (as returned by `gameVariants()`), this will be
+      called on start with the user-selected game variant.
+
+      :param variant: The game variant selected by the user.
+
+   .. py:method:: sortMechanism() -> SortMechanism
+
+      :returns: The sort mechanism for this game.
+
+   .. py:method:: steamAPPId() -> str
+
+      Retrieve the Steam app ID for this game.
+
+      If the game is not available on Steam, this should return an empty string.
+
+      If a game is available in multiple versions, those might have different app ids. The plugin
+      should try to return the right one
+
+      :returns: The Steam app ID for this game. Should be empty for games not available on steam.
+
+   .. py:method:: validShortNames() -> Sequence[str]
+      :abstractmethod:
+
+      Retrieve the valid 'short' names for this game.
+
+      This is used to determine if a Nexus download is valid for the current game since not all
+      game variants have their own nexus pages and others can handle downloads from other nexus
+      game pages and should be allowed to do so (e.g., you can install some Skyrim LE mod even
+      when using Skyrim SE).
+
+      The short name should be considered the primary handler for a directly supported game
+      for purposes of auto-launching an instance.
+
+      :returns: The list of valid short names for this game.
+
+.. py:class:: IPluginInstaller
+
+   Bases: :py:obj:`IPlugin`
+
+   This is the top-level class for installer. Actual installers should inherit either:
+
+     - `IPluginInstallerSimple` if the installer can work directly with the archive. This is what
+       most installers use.
+     - `IPluginInstallerCustom` if the installer needs to perform custom operations. This is only
+       used by the external NCC installer and the OMOD installer.
+
+   .. py:method:: _manager() -> IInstallationManager
+
+      :returns: The installation manager.
+
+   .. py:method:: _parentWidget() -> PyQt6.QtWidgets.QWidget
+
+      :returns: The parent widget.
+
+   .. py:method:: isArchiveSupported(tree: IFileTree) -> bool
+      :abstractmethod:
+
+      Check if the given file tree corresponds to a supported archive for this installer.
+
+      :param tree: The tree representing the content of the archive.
+
+      :returns: True if this installer can handle the archive, False otherwise.
+
+   .. py:method:: isManualInstaller() -> bool
+      :abstractmethod:
+
+      Check if this installer is a manual installer.
+
+      :returns: True if this installer is a manual installer, False otherwise.
+
+   .. py:method:: onInstallationEnd(result: InstallResult, new_mod: IModInterface) -> None
+
+      Method calls at the end of the installation process. This method is only called once
+      per installation process, even for recursive installations (e.g. with the bundle installer).
+
+      :param result: The result of the installation.
+      :param new_mod: If the installation succeeded (result is RESULT_SUCCESS), contains the newly
+                      installed mod, otherwise it contains a null pointer.
+
+   .. py:method:: onInstallationStart(archive: str, reinstallation: bool, current_mod: IModInterface) -> None
+
+      Method calls at the start of the installation process, before any other methods.
+      This method is only called once per installation process, even for recursive
+      installations (e.g. with the bundle installer).
+
+      If `reinstallation` is true, then the given mod is the mod being reinstalled (the one
+      selected by the user). If `reinstallation` is false and `currentMod` is not null, then
+      it corresponds to a mod MO2 thinks corresponds to the archive (e.g. based on matching Nexus ID
+      or name).
+
+      The default implementation does nothing.
+
+      :param archive: Path to the archive that is going to be installed.
+      :param reinstallation: True if this is a reinstallation, False otherwise.
+      :param current_mod: A currently installed mod corresponding to the archive being installed, or None
+                          if there is no such mod.
+
+   .. py:method:: priority() -> int
+      :abstractmethod:
+
+      Retrieve the priority of this installer.
+
+      If multiple installers are able to handle an archive, the one with the highest priority wins.
+
+      :returns: The priority of this installer.
+
+   .. py:method:: setInstallationManager(manager: IInstallationManager) -> None
+
+      Set the installation manager for this installer.
+
+      Python plugins usually do not need to re-implement this and can directly access the installation
+      manager using `_manager()`.
+
+      :param manager: The installation manager.
+
+   .. py:method:: setParentWidget(parent: PyQt6.QtWidgets.QWidget) -> None
+
+      Set the parent widget for this installer.
+
+      Python plugins usually do not need to re-implement this and can directly access the parent
+      widget using `_parentWidget()` once the UI has been initialized.
+
+      :param parent: The parent widget.
+
+.. py:class:: IPluginInstallerCustom
+
+   Bases: :py:obj:`IPluginInstaller`
+
+   Custom installer for mods. Custom installers receive the archive name and have to go
+   from there. They have to be able to extract the archive themselves.
+
+   Example of such installers are the external NCC installer or the OMOD installer.
+
+   .. py:method:: install(mod_name: GuessedString, game_name: str, archive_name: str, version: str, nexus_id: int) -> InstallResult
+      :abstractmethod:
+
+      Install the given archive.
+
+      The mod needs to be created by calling `IOrganizer.createMod` first.
+
+      :param mod_name: Name of the mod to install. As an input parameter this is the suggested name
+                       (e.g. from meta data) The installer may change this parameter to rename the mod).
+      :param game_name: Name of the game for which the mod is installed.
+      :param archive_name: Name of the archive to install.
+      :param version: Version of the mod. May be empty if the version is not yet known. The plugin is responsible
+                      for setting the version on the created mod.
+      :param nexus_id: ID of the mod or -1 if unknown. The plugin is responsible for setting the mod ID for the
+                       created mod.
+
+      :returns: The result of the installation process.
+
+   .. py:method:: isArchiveSupported(tree: IFileTree) -> bool
+                  isArchiveSupported(archive_name: str) -> bool
+      :abstractmethod:
+
+      Check if the given file is a supported archive for this installer.
+
+      :param archive_name: Name of the archive.
+
+      :returns: True if this installer can handle the archive, False otherwise.
+
+   .. py:method:: supportedExtensions() -> set[str]
+      :abstractmethod:
+
+      :returns: A list of file extensions that this installer can handle.
+
+.. py:class:: IPluginInstallerSimple
+
+   Bases: :py:obj:`IPluginInstaller`
+
+   Simple installer for mods. Simple installers only deal with an in-memory structure
+   representing the archive and can modify what to install and where by editing this structure.
+   Actually extracting the archive is handled by the manager.
+
+   .. py:method:: install(name: GuessedString, tree: IFileTree, version: str, nexus_id: int) -> Union[InstallResult, IFileTree, tuple[InstallResult, IFileTree, str, int]]
+      :abstractmethod:
+
+      Install a mod from an archive filetree.
+
+      The installer can modify the given tree and use the manager to extract or create new
+      files.
+
+      This method returns different type of objects depending on the actual result of the
+      installation. The C++ bindings for this method always returns a tuple (result, tree,
+      version, id).
+
+      :param name: Name of the mod to install. As an input parameter this is the suggested name
+                   (e.g. from meta data) The installer may change this parameter to rename the mod).
+      :param tree: In-memory representation of the archive content.
+      :param version: Version of the mod, or an empty string is unknown.
+      :param nexus_id: ID of the mod, or -1 if unknown.
+
+      :returns: In case of failure, the result of the installation, otherwise the modified tree or
+      a tuple (result, tree, version, id) containing the result of the installation, the
+      modified tree, the new version and the new ID. The tuple can be returned even if the
+      installation did not succeed.
+
+.. py:class:: IPluginList
+
+   Primary interface to the list of plugins.
+
+   .. py:method:: hasLightExtension(name: str) -> bool
+
+      Determine if a plugin has a .esl extension.
+
+      :param name: Filename of the plugin (without path but with file extension).
+
+      :returns: True if the given file has a .esl extension, False otherwise or if the
+
+      file does not exist.
+
+   .. py:method:: hasMasterExtension(name: str) -> bool
+
+      Determine if a plugin has a .esm extension.
+
+      :param name: Filename of the plugin (without path but with file extension).
+
+      :returns: True if the given file has a .esm extension, False otherwise or if the
+
+      file does not exist.
+
+   .. py:method:: hasNoRecords(name: str) -> bool
+
+      Determine if a plugin has no records.
+
+      :param name: Filename of the plugin (without path but with file extension).
+
+      :returns: True if the given file plugin contains no records, False if it does OR if the
+
+      file does not exist.
+
+   .. py:method:: isLightFlagged(name: str) -> bool
+
+      Determine if a plugin is flagged as light.
+
+      In gamebryo games, a master file will usually have a .esl file extension but
+      technically an esp can be flagged as light.
+
+      :param name: Filename of the plugin (without path but with file extension).
+
+      :returns: True if the given plugin is a light plugin, False otherwise or if the
+
+      file does not exist.
+
+   .. py:method:: isMasterFlagged(name: str) -> bool
+
+      Determine if a plugin is flagged as mater, i.e., a library, reference by
+      other plugins.
+
+      In gamebryo games, a master file will usually have a .esm file extension but
+      technically an esp can be flagged as master and an esm might not be.
+
+      :param name: Filename of the plugin (without path but with file extension).
+
+      :returns: True if the given plugin is a master plugin, False otherwise or if the
+
+      file does not exist.
+
+   .. py:method:: isMediumFlagged(name: str) -> bool
+
+      Determine if a plugin is flagged as medium.
+
+      This plugin flag was added in Starfield and signifies plugin records that
+      update existing records
+
+      :param name: Filename of the plugin (without path but with file extension).
+
+      :returns: True if the given plugin is a medium plugin, False otherwise or if the
+
+      file does not exist.
+
+   .. py:method:: loadOrder(name: str) -> int
+
+      Retrieve the load order of a plugin.
+
+      :param name: Filename of the plugin (without path but with file extension).
+
+      :returns: The load order of the plugin (the order in which the game loads it). If all plugins are enabled this
+
+      is the same as the priority but disabled plugins will have a load order of -1. This also returns -1
+      if the plugin does not exist.
+
+   .. py:method:: masters(name: str) -> Sequence[str]
+
+      Retrieve the list of masters required for a plugin.
+
+      :param name: Filename of the plugin (without path but with file extension).
+
+      :returns: The list of masters for the plugin (filenames with extension, no path).
+
+   .. py:method:: onPluginMoved(callback: Callable[[str, int, int], None]) -> bool
+
+      Install a new handler to be called when a plugin is moved.
+
+      :param callback: The function to call when a plugin is moved. The first parameter is the plugin name, the
+                       second the old priority of the plugin and the third one the new priority.
+
+      :returns: True if the handler was installed properly (there are currently no reasons for this to fail).
+
+   .. py:method:: onPluginStateChanged(callback: Callable[[dict[str, PluginState]], None]) -> bool
+
+      Install a new handler to be called when plugin states change.
+
+      :param callback: The function to call when a plugin states change. The parameter is a map from plugin names to new
+                       plugin states for the plugin whose states have changed.
+
+      :returns: True if the handler was installed properly (there are currently no reasons for this to fail).
+
+   .. py:method:: onRefreshed(callback: Callable[[], None]) -> bool
+
+      Install a new handler to be called when the list of plugins is refreshed.
+
+      :param callback: The function to call when the list of plugins is refreshed.
+
+      :returns: True if the handler was installed properly (there are currently no reasons for this to fail).
+
+   .. py:method:: origin(name: str) -> str
+
+      Retrieve the origin of a plugin. This is either the (internal) name of a mod, `"overwrite"` or `"data"`.
+
+      The internal name of a mod can differ from the display name for disambiguation.
+
+      :param name: Filename of the plugin (without path but with file extension).
+
+      :returns: The name of the origin of the plugin, or an empty string if the plugin does not exist.
+
+   .. py:method:: pluginNames() -> Sequence[str]
+
+      :returns: The list of all plugin names.
+
+   .. py:method:: priority(name: str) -> int
+
+      Retrieve the priority of a plugin.
+
+      The higher the priority, the more important.
+
+      :param name: Filename of the plugin (without path but with file extension).
+
+      :returns: The priority of the given plugin, or -1 if the plugin does not exist.
+
+   .. py:method:: setLoadOrder(loadorder: Sequence[str]) -> None
+
+      Set the load order.
+
+      Plugins not included in the list will be placed at highest priority in the order they
+      were before.
+
+      :param loadorder: The new load order, specified by the list of plugin names, sorted.
+
+   .. py:method:: setPriority(name: str, priority: int) -> bool
+
+      Change the priority of a plugin.
+
+      :param name: Filename of the plugin (without path but with file extension).
+      :param priority: New priority of the plugin.
+
+      :returns: True on success, False if the priority change was not possible. This is usually because
+
+      one of the parameters is invalid. The function returns true even if the plugin was not moved
+      at the specified priority (e.g. when trying to move a non-master plugin before a master one).
+
+   .. py:method:: setState(name: str, state: PluginState) -> None
+
+      Set the state of a plugin.
+
+      :param name: Filename of the plugin (without path but with file extension).
+      :param state: New state of the plugin (`INACTIVE` or `ACTIVE`).
+
+   .. py:method:: state(name: str) -> PluginState
+
+      Retrieve the state of a plugin.
+
+      :param name: Filename of the plugin (without path but with file extension).
+
+      :returns: The state of the plugin.
+
+.. py:class:: IPluginModPage
+
+   Bases: :py:obj:`IPlugin`
+
+   Base class for all plugins.
+
+   .. py:method:: _parentWidget() -> PyQt6.QtWidgets.QWidget
+
+      :returns: The parent widget.
+
+   .. py:method:: displayName() -> str
+      :abstractmethod:
+
+      :returns: The name of the page as displayed in the UI.
+
+   .. py:method:: handlesDownload(page_url: PyQt6.QtCore.QUrl, download_url: PyQt6.QtCore.QUrl, fileinfo: ModRepositoryFileInfo) -> bool
+      :abstractmethod:
+
+      Check if the plugin handles the specified download.
+
+      :param page_url: URL of the page that contains the download link.
+      :param download_url: The download URL.
+      :param fileinfo: Not usable in python.
+
+      :returns: True if this plugin wants to handle the specified download, False otherwise.
+
+   .. py:method:: icon() -> PyQt6.QtGui.QIcon
+      :abstractmethod:
+
+      :returns: The icon to display with the page.
+
+   .. py:method:: pageURL() -> PyQt6.QtCore.QUrl
+      :abstractmethod:
+
+      :returns: The URL to open when the user wants to visit this mod page.
+
+   .. py:method:: setParentWidget(parent: PyQt6.QtWidgets.QWidget) -> None
+
+      Set the parent widget for this mod page.
+
+      Python plugins usually do not need to re-implement this and can directly access the parent
+      widget using `_parentWidget()` once the UI has been initialized.
+
+      :param parent: The parent widget.
+
+   .. py:method:: useIntegratedBrowser() -> bool
+      :abstractmethod:
+
+      Indicates if the page should be displayed in the integrated browser.
+
+      Unless the page provides a special means of starting downloads (like the nxm:// url schema
+      on nexus),  it will not be possible to handle downloads unless the integrated browser is used!
+
+      :returns: True if the page should be opened in the integrated browser, False otherwise.
+
+.. py:class:: IPluginPreview
+
+   Bases: :py:obj:`IPlugin`
+
+   These plugins add support for previewing files in the data pane. Right now all image formats supported
+   by qt are implemented (including dds) but no audio files and no 3d mesh formats.
+
+   .. py:method:: genDataPreview(file_data: PyQt6.QtCore.QByteArray, filename: str, max_size: PyQt6.QtCore.QSize) -> PyQt6.QtWidgets.QWidget
+      :abstractmethod:
+
+      Generate a preview widget from in-memory data.
+
+      :param file_data: In-memory data to preview.
+      :param filename: Name of the file the data comes from.
+      :param max_size: Maximum size of the generated widget.
+
+      :returns: The widget showing a preview of the in-memory data.
+
+   .. py:method:: genFilePreview(filename: str, max_size: PyQt6.QtCore.QSize) -> PyQt6.QtWidgets.QWidget
+      :abstractmethod:
+
+      Generate a preview widget for the specified file.
+
+      :param filename: Path to the file to preview.
+      :param max_size: Maximum size of the generated widget.
+
+      :returns: The widget showing a preview of the file.
+
+   .. py:method:: supportedExtensions() -> set[str]
+      :abstractmethod:
+
+      :returns: The list of file extensions that are supported by this preview plugin.
+
+   .. py:method:: supportsArchives() -> bool
+      :abstractmethod:
+
+      Check if this preview plugin supports preview from in-memory data.
+
+      :returns: True if the plugin supports preview from raw data, False otherwise.
+
+.. py:class:: IPluginRequirement
+
+   Class representing requirements for plugins.
+
+   .. py:class:: Problem(short_description: str, long_description: str = '')
+
+      Class representing a problem found by a requirement.
+
+      .. py:method:: longDescription() -> str
+
+         :returns: A long description of the problem.
+
+      .. py:method:: shortDescription() -> str
+
+         :returns: A short description of the problem.
+
+   .. py:method:: check(organizer: IOrganizer) -> Optional[IPluginRequirement]
+
+      Check if the requirement is met, and return a problem if not.
+
+      :param organizer: The IOrganizer instance.
+
+      :returns: The problem found if the requirement is not met, otherwise None.
+
+.. py:class:: IPluginTool
+
+   Bases: :py:obj:`IPlugin`
+
+   This is the simplest of plugin interfaces. Such plugins simply place an icon inside the tools sub-menu
+   and get invoked when the user clicks it. They are expected to have a user interface of some sort. These
+   are almost like independent applications except they can access all Mod Organizer interfaces like querying
+   and modifying the current profile, mod list, load order, use MO to install mods and so on. A tool plugin
+   can (and should!) integrate its UI as a window inside MO and thus doesn't have to initialize a windows
+   application itself.
+
+   .. py:method:: _parentWidget() -> PyQt6.QtWidgets.QWidget
+
+      :returns: The parent widget.
+
+   .. py:method:: display() -> None
+      :abstractmethod:
+
+      Called when the user starts the tool.
+
+   .. py:method:: displayName() -> str
+      :abstractmethod:
+
+      :returns: The display name for this tool, as shown in the tool menu.
+
+   .. py:method:: icon() -> PyQt6.QtGui.QIcon
+      :abstractmethod:
+
+      :returns: The icon for this tool, or a default-constructed QICon().
+
+   .. py:method:: setParentWidget(parent: PyQt6.QtWidgets.QWidget) -> None
+
+      Set the parent widget for this tool.
+
+      Python plugins usually do not need to re-implement this and can directly access the parent
+      widget using `_parentWidget()` once the UI has been initialized.
+
+      :param parent: The parent widget.
+
+   .. py:method:: tooltip() -> str
+      :abstractmethod:
+
+      :returns: The tooltip for this tool.

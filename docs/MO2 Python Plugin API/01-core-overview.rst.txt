@@ -1,0 +1,75 @@
+mobase - Core Overview
+=====================
+
+.. py:module:: mobase
+
+This file provides a high-level overview of the MO2 Python API structure.
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 1
+
+   /autoapi/mobase/widgets/index
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   mobase.GameFeatureType
+   mobase.INVALID_HANDLE_VALUE
+   mobase.MoVariant
+   mobase.__version__
+
+
+Classes Summary
+---------------
+
+The mobase module contains several categories of classes:
+
+**Core Management Interfaces:**
+- IOrganizer - Main MO2 organizer interface
+- IModList - Mod list management
+- IModInterface - Individual mod interface
+- IProfile - Profile management
+
+**Plugin Interfaces:**
+- IPlugin - Base plugin interface
+- IPluginDiagnose - Diagnostic plugins
+- IPluginGame - Game-specific plugins
+- IPluginTool - Tool plugins
+- IPluginInstaller - Installation plugins
+
+**File and Data Management:**
+- FileInfo - File information
+- FileTreeEntry - File tree operations
+- IFileTree - File tree interface
+- DataArchives - Archive management
+
+**Utility Classes:**
+- VersionInfo - Version handling
+- ExecutableInfo - Executable management
+- ModDataChecker - Mod validation
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   mobase.getFileVersion
+   mobase.getIconForExecutable
+   mobase.getProductVersion
+
+
+Package Contents
+----------------
+
+For detailed documentation of specific classes, see the specialized documentation files:
+- 02-file-operations.rst.txt - File and data structures
+- 03-plugin-interfaces.rst.txt - Plugin development interfaces  
+- 04-organizer-management.rst.txt - Core MO2 management interfaces
+- 05-utility-classes.rst.txt - Helper classes and utilities

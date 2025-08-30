@@ -5,7 +5,8 @@
       "WebFetch(domain:github.com)",
       "WebSearch",
       "Bash(python:*)",
-      "Bash(del test_matching.py debug_path_matching.py)"
+      "Bash(del test_matching.py debug_path_matching.py)",
+      "Bash(rg:*)"
     ],
     "deny": [],
     "ask": []
