@@ -1,0 +1,44 @@
+[size=4][b]Download Copier for Shared Download Folder Enjoyers[/b][/size]
+
+[b]A plugin for MO2 users who maintain shared download folders and create Wabbajack modlists.[/b]
+
+[size=3][b]What It Does[/b][/size]
+This MO2 plugin copies all mod downloads (active and inactive) from your shared download folder into the pristine download folder structure required by Wabbajack. It automatically handles .meta files, detects missing downloads, and ensures your modlist has everything needed for distribution.
+
+[size=3][b]Key Features[/b][/size]
+[list]
+[*][b]Smart Copy Logic[/b] - Only copies files that don't already exist or have changed (no unnecessary duplicates)
+[*][b]Meta File Management[/b] - Automatically copies critical .meta files containing Nexus IDs and version info
+[*][b]Disk Space Protection[/b] - Real-time disk usage monitoring with warnings before copying
+[*][b]Missing Download Detection[/b] - Identifies mods without download files and generates detailed reports
+[*][b]Progress Tracking[/b] - Live progress bar with file-by-file status updates
+[*][b]Comprehensive Reports[/b] - Detailed logs of copied, skipped, and failed files
+[/list]
+
+[size=3][b]How to Use[/b][/size]
+[b]1. Launch the Tool[/b] - Find "Copy Downloads for Wabbajack" in MO2's Tools menu
+[b]2. Choose Destination[/b] - Select your pristine download folder (auto-suggests MO2 instance + /downloads)
+[b]3. Review Scan Results[/b] - Check found downloads, missing files, and total copy size before proceeding
+[b]4. Execute Copy[/b] - Confirm the operation and watch real-time progress as files are copied
+
+[size=3][b]Perfect For[/b][/size]
+[list]
+[*]Wabbajack modlist authors preparing for distribution
+[*]Users with shared download folders across multiple MO2 instances
+[*]Modders who need pristine download archives for backup
+[*]Anyone migrating downloads between MO2 installations
+[*]Modlist curators who maintain clean download structures
+[/list]
+
+[size=3][b]Requirements[/b][/size]
+[list]
+[*]Mod Organizer 2 with Python plugin support
+[*]Sufficient disk space for duplicate downloads
+[*]Windows (tested) or Linux (should work)
+[/list]
+
+[size=3][b]Known Limitations[/b][/size]
+[list]
+[*][b]Merged Mods[/b] - When mods are merged in MO2, only the last merged mod's download info is retained. Wabbajack requires ALL original individual downloads, but this tool will only find the final mod that was merged in.
+[*][b]Manual Installations[/b] - Mods installed manually (without downloads) will be flagged as missing downloads in reports.
+[/list]

@@ -1,340 +1,22 @@
+"""
+UI Dialog for the Wabbajack Download Copier plugin
+"""
+
 import os
-import shutil
 from pathlib import Path
 from datetime import datetime
-from PyQt6.QtCore import *
-from PyQt6.QtGui import *
+from PyQt6.QtCore import Qt
+from PyQt6.QtGui import QFont
 from PyQt6.QtWidgets import *
 import mobase
-
-
-def format_file_size(size_bytes):
-    """Format file size in human-readable format"""
-    if size_bytes == 0:
-        return "0 B"
-    
-    size_names = ["B", "KB", "MB", "GB", "TB"]
-    i = 0
-    while size_bytes >= 1024 and i < len(size_names) - 1:
-        size_bytes /= 1024.0
-        i += 1
-    
-    if i == 0:
-        return f"{int(size_bytes)} {size_names[i]}"
-    else:
-        return f"{size_bytes:.2f} {size_names[i]}"
-
-
-def get_disk_usage(path):
-    """Get disk usage statistics for the given path"""
-    try:
-        path = Path(path)
-        
-        if os.name == 'nt':  # Windows
-            import ctypes
-            
-            # For Windows, we need to get the root drive path
-            # Convert D:\Modlists\NS3 PBR\downloads to D:\
-            drive_path = str(path.anchor)  # Gets "D:\" from the path
-            
-            free_bytes = ctypes.c_ulonglong(0)
-            total_bytes = ctypes.c_ulonglong(0)
-            result = ctypes.windll.kernel32.GetDiskFreeSpaceExW(
-                ctypes.c_wchar_p(drive_path),
-                ctypes.pointer(free_bytes),
-                ctypes.pointer(total_bytes),
-                None
-            )
-            
-            if result:
-                return free_bytes.value, total_bytes.value
-            else:
-                # Fallback: try with the full path
-                result = ctypes.windll.kernel32.GetDiskFreeSpaceExW(
-                    ctypes.c_wchar_p(str(path)),
-                    ctypes.pointer(free_bytes),
-                    ctypes.pointer(total_bytes),
-                    None
-                )
-                if result:
-                    return free_bytes.value, total_bytes.value
-                else:
-                    return None, None
-        else:  # Unix-like
-            statvfs = os.statvfs(str(path))
-            free_bytes = statvfs.f_frsize * statvfs.f_bavail
-            total_bytes = statvfs.f_frsize * statvfs.f_blocks
-            return free_bytes, total_bytes
-    except Exception as e:
-        # Return debug info in case we need to troubleshoot
-        print(f"Disk usage error: {e}")
-        return None, None
-
-
-class WabbajackDownloadCopier(mobase.IPluginTool):
-    def __init__(self):
-        super().__init__()
-        self._organizer = None
-        self._parent_widget = None
-
-    def init(self, organizer):
-        self._organizer = organizer
-        return True
-
-    def name(self):
-        return "Wabbajack Download Copier"
-
-    def localizedName(self):
-        return "Wabbajack Download Copier"
-
-    def author(self):
-        return "MO2 Plugin Developer"
-
-    def description(self):
-        return "Copies download files for all mods (active and inactive) to create a pristine Wabbajack downloads folder"
-
-    def version(self):
-        return mobase.VersionInfo(1, 0, 0, mobase.ReleaseType.FINAL)
-
-    def requirements(self):
-        return []
-
-    def settings(self):
-        return []
-
-    def displayName(self):
-        return "Copy Downloads for Wabbajack"
-
-    def tooltip(self):
-        return "Identify and copy download files for all mods (active and inactive) to create a pristine downloads folder"
-
-    def icon(self):
-        return QIcon()
-
-    def setParentWidget(self, widget):
-        self._parent_widget = widget
-
-    def display(self):
-        dialog = WabbajackCopyDialog(self._organizer, self._parent_widget)
-        dialog.exec()
-
-    def get_default_downloads_path(self):
-        """Get the expected downloads folder path for this MO2 instance"""
-        base_path = Path(self._organizer.basePath())
-        return base_path / "downloads"
-
-    def get_mod_downloads(self):
-        """Identify download files for all installed mods"""
-        mod_downloads = {}
-        missing_downloads = []
-        
-        mod_list = self._organizer.modList()
-        current_downloads_path = Path(self._organizer.downloadsPath())
-        
-        # Debug info - let's show this in the UI instead since console isn't working
-        all_mods = mod_list.allMods()
-        total_mods = len(all_mods)
-        separators = [mod for mod in all_mods if mod.endswith('_separator')]
-        actual_mods = total_mods - len(separators)
-        
-        debug_info = []
-        debug_info.append(f"Current downloads path: {current_downloads_path}")
-        debug_info.append(f"Total entries: {total_mods}")
-        debug_info.append(f"Separators (skipped): {len(separators)}")
-        debug_info.append(f"Actual mods to scan: {actual_mods}")
-        
-        sample_count = 0
-        for i, mod_name in enumerate(mod_list.allMods()):
-            # Skip separators - they don't have downloads
-            if mod_name.endswith('_separator'):
-                continue
-                
-            if sample_count < 5:  # Only log first 5 non-separators for debugging
-                mod = mod_list.getMod(mod_name)
-                if mod:
-                    installation_file = mod.installationFile()
-                    if installation_file and not os.path.isabs(installation_file):
-                        full_path = current_downloads_path / installation_file
-                        exists = full_path.exists()
-                        debug_info.append(f"Sample mod '{mod_name}':")
-                        debug_info.append(f"  installationFile = '{installation_file}'")
-                        debug_info.append(f"  full_path = '{full_path}'")
-                        debug_info.append(f"  exists = {exists}")
-                    else:
-                        debug_info.append(f"Sample mod '{mod_name}': installationFile = '{installation_file}'")
-                    sample_count += 1
-            
-            # Skip separators in main scanning loop too
-            if mod_name.endswith('_separator'):
-                continue
-                
-            mod = mod_list.getMod(mod_name)  # Use mod_list.getMod instead of organizer.getMod
-            if mod:  # Include both active and inactive mods for Wabbajack
-                installation_file = mod.installationFile()
-                
-                if installation_file:
-                    # If installationFile returns just a filename, combine it with downloads path
-                    if not os.path.isabs(installation_file):
-                        full_path = current_downloads_path / installation_file
-                    else:
-                        full_path = Path(installation_file)
-                    
-                    if full_path.exists():
-                        # Check if it's in the downloads folder
-                        if current_downloads_path in full_path.parents or current_downloads_path == full_path.parent:
-                            mod_downloads[mod_name] = str(full_path)
-                        else:
-                            # File exists but not in downloads folder - might be manually installed
-                            missing_downloads.append({
-                                'mod_name': mod_name,
-                                'reason': 'File exists outside downloads folder',
-                                'file_path': str(full_path)
-                            })
-                    else:
-                        missing_downloads.append({
-                            'mod_name': mod_name,
-                            'reason': 'Installation file does not exist',
-                            'file_path': str(full_path)
-                        })
-                else:
-                    missing_downloads.append({
-                        'mod_name': mod_name,
-                        'reason': 'No installation file found',
-                        'file_path': 'N/A'
-                    })
-        
-        # Store debug info for display in UI
-        self._debug_info = debug_info
-        return mod_downloads, missing_downloads
-
-    def calculate_copy_size(self, mod_downloads):
-        """Calculate total size of files to be copied (including meta files)"""
-        total_size = 0
-        file_count = 0
-        
-        for mod_name, download_path in mod_downloads.items():
-            try:
-                # Main download file
-                if os.path.exists(download_path):
-                    total_size += os.path.getsize(download_path)
-                    file_count += 1
-                
-                # Meta file
-                meta_path = download_path + ".meta"
-                if os.path.exists(meta_path):
-                    total_size += os.path.getsize(meta_path)
-                    file_count += 1
-                    
-            except OSError:
-                # Skip files we can't access
-                continue
-        
-        return total_size, file_count
-
-    def generate_missing_downloads_report(self, missing_downloads, report_path):
-        """Generate a detailed report of missing downloads"""
-        try:
-            with open(report_path, 'w', encoding='utf-8') as f:
-                f.write("WABBAJACK MISSING DOWNLOADS REPORT\n")
-                f.write("=" * 50 + "\n\n")
-                f.write(f"Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
-                f.write(f"MO2 Instance: {self._organizer.basePath()}\n")
-                f.write(f"Current Downloads Folder: {self._organizer.downloadsPath()}\n\n")
-                f.write(f"Total Missing Downloads: {len(missing_downloads)}\n\n")
-                
-                if not missing_downloads:
-                    f.write("✓ All mods have their download files available!\n")
-                    return True
-                
-                f.write("MISSING DOWNLOADS:\n")
-                f.write("-" * 30 + "\n\n")
-                
-                for i, missing in enumerate(missing_downloads, 1):
-                    f.write(f"{i}. {missing['mod_name']}\n")
-                    f.write(f"   Reason: {missing['reason']}\n")
-                    f.write(f"   File Path: {missing['file_path']}\n\n")
-                
-                f.write("\nNOTES:\n")
-                f.write("- Mods with 'No installation file found' may have been installed manually\n")
-                f.write("- Mods with files 'outside downloads folder' may need their downloads re-downloaded\n")
-                f.write("- Check these mods manually and re-download if needed for Wabbajack compatibility\n")
-                f.write("- When re-downloading, ensure both the archive file AND its .meta file are present\n")
-                f.write("- .meta files contain important metadata (Nexus IDs, versions) required by Wabbajack\n")
-                
-            return True
-        except Exception as e:
-            return False
-
-
-class CopyWorker(QThread):
-    progress_updated = pyqtSignal(int, str)
-    copy_completed = pyqtSignal(dict)
-    error_occurred = pyqtSignal(str)
-
-    def __init__(self, mod_downloads, destination_path):
-        super().__init__()
-        self.mod_downloads = mod_downloads
-        self.destination_path = Path(destination_path)
-        self.results = {
-            'copied': [],
-            'skipped': [],
-            'failed': [],
-            'meta_copied': [],
-            'meta_missing': []
-        }
-
-    def run(self):
-        try:
-            self.destination_path.mkdir(parents=True, exist_ok=True)
-            total_files = len(self.mod_downloads)
-            
-            for i, (mod_name, source_path) in enumerate(self.mod_downloads.items()):
-                self.progress_updated.emit(
-                    int((i / total_files) * 100),
-                    f"Processing {mod_name}..."
-                )
-                
-                source = Path(source_path)
-                destination = self.destination_path / source.name
-                
-                try:
-                    # Copy main download file
-                    if destination.exists():
-                        if destination.stat().st_size == source.stat().st_size:
-                            self.results['skipped'].append(f"{mod_name} -> {source.name} (already exists)")
-                        else:
-                            shutil.copy2(source_path, destination)
-                            self.results['copied'].append(f"{mod_name} -> {source.name}")
-                    else:
-                        shutil.copy2(source_path, destination)
-                        self.results['copied'].append(f"{mod_name} -> {source.name}")
-                    
-                    # Copy corresponding .meta file if it exists
-                    meta_source = Path(source_path + ".meta")
-                    meta_destination = Path(str(destination) + ".meta")
-                    
-                    if meta_source.exists():
-                        if meta_destination.exists():
-                            if meta_destination.stat().st_size != meta_source.stat().st_size:
-                                shutil.copy2(meta_source, meta_destination)
-                                self.results['meta_copied'].append(f"{mod_name} -> {source.name}.meta (updated)")
-                        else:
-                            shutil.copy2(meta_source, meta_destination)
-                            self.results['meta_copied'].append(f"{mod_name} -> {source.name}.meta")
-                    else:
-                        self.results['meta_missing'].append(f"{mod_name} -> {source.name}.meta (no meta file found)")
-                    
-                except Exception as e:
-                    self.results['failed'].append(f"{mod_name} -> {source.name}: {str(e)}")
-            
-            self.progress_updated.emit(100, "Copy operation completed")
-            self.copy_completed.emit(self.results)
-            
-        except Exception as e:
-            self.error_occurred.emit(f"Copy operation failed: {str(e)}")
+from .scanner import DownloadScanner
+from .copier import CopyWorker
+from .utils import format_file_size, get_disk_usage
 
 
 class WabbajackCopyDialog(QDialog):
+    """Main dialog for the Wabbajack Download Copier"""
+    
     def __init__(self, organizer, parent=None):
         super().__init__(parent)
         self.organizer = organizer
@@ -344,7 +26,7 @@ class WabbajackCopyDialog(QDialog):
         self.total_copy_size = 0
         self.total_file_count = 0
         
-        self.setWindowTitle("Wabbajack Download Copier")
+        self.setWindowTitle("Download Copier for Shared Download Folder Enjoyers")
         self.setModal(True)
         self.resize(700, 500)
         
@@ -366,7 +48,8 @@ class WabbajackCopyDialog(QDialog):
         # Description
         desc_label = QLabel(
             "This tool identifies download files for ALL mods (active and inactive) and copies them to a pristine folder "
-            "suitable for Wabbajack list creation. Only files in your current downloads folder will be copied."
+            "suitable for Wabbajack list creation. Only files in your current downloads folder will be copied.\n\n"
+            "Note: For merged mods, only the last merged mod's download is detected. Wabbajack needs all original individual downloads."
         )
         desc_label.setWordWrap(True)
         desc_label.setStyleSheet("margin-bottom: 15px;")
@@ -377,9 +60,8 @@ class WabbajackCopyDialog(QDialog):
         dest_layout = QVBoxLayout(dest_group)
         
         # Auto-detected path info
-        copier = WabbajackDownloadCopier()
-        copier._organizer = self.organizer
-        default_path = str(copier.get_default_downloads_path())
+        scanner = DownloadScanner(self.organizer)
+        default_path = str(scanner.get_default_downloads_path())
         
         info_label = QLabel(f"Suggested path (MO2 instance + /downloads): {default_path}")
         info_label.setStyleSheet("color: #666; font-size: 11px; margin-bottom: 5px;")
@@ -526,11 +208,10 @@ class WabbajackCopyDialog(QDialog):
         self.refresh_btn.setEnabled(False)
         self.refresh_btn.setText("Scanning...")
         
-        # Use the copier instance to get download info
-        copier = WabbajackDownloadCopier()
-        copier._organizer = self.organizer
+        # Use the scanner to get download info
+        scanner = DownloadScanner(self.organizer)
         
-        self.mod_downloads, self.missing_downloads = copier.get_mod_downloads()
+        self.mod_downloads, self.missing_downloads = scanner.get_mod_downloads()
         
         # Update found downloads tab
         found_text = []
@@ -554,17 +235,16 @@ class WabbajackCopyDialog(QDialog):
         self.results_tabs.setTabText(1, f"Missing Downloads ({len(self.missing_downloads)})")
         
         # Calculate total size of files to copy
-        self.total_copy_size, self.total_file_count = copier.calculate_copy_size(self.mod_downloads)
+        self.total_copy_size, self.total_file_count = scanner.calculate_copy_size(self.mod_downloads)
         
-        # Update debug tab
-        if hasattr(copier, '_debug_info'):
-            debug_text = "\n".join(copier._debug_info)
-            debug_text += f"\n\nFinal Results:\n"
-            debug_text += f"- Found downloads: {len(self.mod_downloads)}\n"
-            debug_text += f"- Missing downloads: {len(self.missing_downloads)}\n"
-            debug_text += f"- Total copy size: {format_file_size(self.total_copy_size)}\n"
-            debug_text += f"- Total files to copy: {self.total_file_count}\n"
-            self.debug_widget.setPlainText(debug_text)
+        # Update debug tab with summary
+        debug_text = f"Scan Results:\n"
+        debug_text += f"- Downloads folder: {self.organizer.downloadsPath()}\n"
+        debug_text += f"- Found downloads: {len(self.mod_downloads)}\n"
+        debug_text += f"- Missing downloads: {len(self.missing_downloads)}\n"
+        debug_text += f"- Total copy size: {format_file_size(self.total_copy_size)}\n"
+        debug_text += f"- Total files to copy: {self.total_file_count}\n"
+        self.debug_widget.setPlainText(debug_text)
         
         # Update size info display
         if self.mod_downloads:
@@ -597,10 +277,9 @@ class WabbajackCopyDialog(QDialog):
         )
         
         if filename:
-            copier = WabbajackDownloadCopier()
-            copier._organizer = self.organizer
+            scanner = DownloadScanner(self.organizer)
             
-            success = copier.generate_missing_downloads_report(self.missing_downloads, filename)
+            success = scanner.generate_missing_downloads_report(self.missing_downloads, filename)
             
             if success:
                 QMessageBox.information(
@@ -722,7 +401,3 @@ class WabbajackCopyDialog(QDialog):
         self.refresh_btn.setEnabled(True)
         
         QMessageBox.critical(self, "Copy Error", error_message)
-
-
-def createPlugin():
-    return WabbajackDownloadCopier()

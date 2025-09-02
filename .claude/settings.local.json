@@ -6,7 +6,10 @@
       "WebSearch",
       "Bash(python:*)",
       "Bash(del test_matching.py debug_path_matching.py)",
-      "Bash(rg:*)"
+      "Bash(rg:*)",
+      "Bash(del \"C:\\repos\\meteor-mo2-plugins\\projects\\wabbajack_download_copier.py\")",
+      "Bash(dir)",
+      "Read(d:\\change logs/**)"
     ],
     "deny": [],
     "ask": []
